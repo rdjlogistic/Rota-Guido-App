@@ -72,7 +72,7 @@ class _SignInScreeanState extends State<SignInScreean> {
                                           ),
                                         ),
 
-                                        const SizedBox(height: 50),
+                                        const SizedBox(height: 60),
 
                                         ///Login Text
                                         Container(
@@ -139,6 +139,7 @@ class _SignInScreeanState extends State<SignInScreean> {
                                         ),
 
                                         const SizedBox(height: 180),
+                                        // const SizedBox(height: 75),
 
                                         ///Login Button
                                         Container(
@@ -176,7 +177,7 @@ class _SignInScreeanState extends State<SignInScreean> {
                         ],
                       ),
                       const SizedBox(
-                        height: 50,
+                        height: 30,
                       ),
                       Container(
                         alignment: Alignment.bottomCenter,

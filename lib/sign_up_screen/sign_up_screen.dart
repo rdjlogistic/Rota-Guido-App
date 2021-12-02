@@ -66,7 +66,7 @@ class _RegisterState extends State<Register> {
                             ),
                           ),
 
-                          const SizedBox(height: 50),
+                          const SizedBox(height: 60),
 
                           ///Login Text
                           Container(
@@ -168,6 +168,7 @@ class _RegisterState extends State<Register> {
                           ),
 
                           const SizedBox(height: 100),
+                          // const SizedBox(height: 50),
 
                           ///Login Button
                           Container(
@@ -222,7 +223,7 @@ class _RegisterState extends State<Register> {
               ],
             ),
             const SizedBox(
-              height: 50,
+              height: 30,
             ),
             Container(
               alignment: Alignment.bottomCenter,
