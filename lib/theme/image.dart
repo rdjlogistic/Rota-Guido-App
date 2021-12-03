@@ -34,6 +34,19 @@ class Images {
   static var categoryImage = '${images}category.png';
   static var newsImage = '${images}news.png';
 
+  static var homeBottom = '${images}home_bottom.png';
+  static var userBottom = '${images}user_bottom.png';
+  static var newsBottom = '${images}news_bottom.png';
+  static var profileBottom = '${images}profile_bottom.png';
+  static var moreBottom = '${images}more_bottom.png';
+
+  static var usersActive = '${images}users_active.png';
+  static var homeActive = '${images}home_active.png';
+  static var newsActive = '${images}news_active.png';
+  static var userActive = '${images}user_active.png';
+  static var moreActive = '${images}more_active.png';
+
+  static var back = '${images}back.png';
 
 
 

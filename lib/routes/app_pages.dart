@@ -2,10 +2,11 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:rota_guido/home_screen/home_screen.dart';
-import 'package:rota_guido/sign_in_screen/signin_screen.dart';
-import 'package:rota_guido/sign_up_screen/sign_up_screen.dart';
-import 'package:rota_guido/splash_screen/splash_screen.dart';
+import 'package:rota_guido/screen/home_screen/home_screen.dart';
+import 'package:rota_guido/screen/sign_in_screen/signin_screen.dart';
+import 'package:rota_guido/screen/sign_up_screen/sign_up_screen.dart';
+import 'package:rota_guido/screen/splash_screen/splash_screen.dart';
+
 
 part 'app_routes.dart';
 
