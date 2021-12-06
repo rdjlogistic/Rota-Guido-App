@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:rota_guido/screen/blog_info/blog_info.dart';
 import 'package:rota_guido/screen/home_screen/home_screen.dart';
 import 'package:rota_guido/screen/sign_in_screen/signin_screen.dart';
 import 'package:rota_guido/screen/sign_up_screen/sign_up_screen.dart';
@@ -36,6 +37,12 @@ class RouteGenerator {
       case Routes.HOME:
         return GetPageRoute(
           page: () => HomeScreen(),
+          transition: Transition.fade,
+          transitionDuration: Duration(milliseconds: duration),
+        );
+      case Routes.BLOG_INFo:
+        return GetPageRoute(
+          page: () => BlogInfo(),
           transition: Transition.fade,
           transitionDuration: Duration(milliseconds: duration),
         );

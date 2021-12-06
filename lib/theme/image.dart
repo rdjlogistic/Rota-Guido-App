@@ -49,6 +49,16 @@ class Images {
   static var back = '${images}back.png';
 
 
+  static var blogInfoImage = '${images}blog_info_image.png';
+  static var related = '${images}related.png';
+  static var related1 = '${images}related1.png';
+  static var related2 = '${images}related2.png';
+  static var related3 = '${images}related3.png';
+  static var related4 = '${images}related4.png';
+
+
+
+
 
 
 }

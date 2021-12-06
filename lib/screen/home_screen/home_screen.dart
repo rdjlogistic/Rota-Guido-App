@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:rota_guido/routes/app_pages.dart';
 
 import 'package:rota_guido/theme/colors.dart';
 import 'package:rota_guido/theme/fonts.dart';
@@ -14,8 +15,6 @@ int _currentIndex = 0;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
-
-
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -34,8 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
     const Text('Page Four'),
     const Text('Page five'),
   ];
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -418,33 +415,35 @@ class _HomeScreenState extends State<HomeScreen> {
       )
     ]),*/
       bottomNavigationBar: BottomNavigationBar(
-        unselectedIconTheme: IconThemeData(color: Colors.grey[400]),
-        selectedIconTheme: const IconThemeData(color: Colors.black),
-        unselectedLabelStyle: TextStyle(color: Colors.grey[400]),
-        selectedLabelStyle: const TextStyle(color: Colors.black),
-        fixedColor: Colors.green,
+        backgroundColor: Colors.white.withOpacity(0.5),
+        // backgroundColor: Colors.transparent,
         type: BottomNavigationBarType.fixed,
         onTap: onTapped,
         currentIndex: _currentIndex,
-        items:[
-          BottomNavigationBarItem(icon: Image.asset(Images.userBottom,scale: 3,), label: '',activeIcon: Image.asset(Images.usersActive,scale: 3)),
-          BottomNavigationBarItem(icon: Image.asset(Images.homeBottom,scale: 3), label: '',activeIcon: Image.asset(Images.homeActive,scale: 3)),
-          BottomNavigationBarItem(icon: Image.asset(Images.newsBottom,scale: 3), label: '',activeIcon: Image.asset(Images.newsActive,scale: 3)),
-          BottomNavigationBarItem(icon: Image.asset(Images.profileBottom,scale:3), label: '',activeIcon: Image.asset(Images.userActive,scale: 3)),
-          BottomNavigationBarItem(icon: Image.asset(Images.moreBottom,scale: 3), label: '',activeIcon: Image.asset(Images.moreActive,scale: 3)),
+        items: [
+          BottomNavigationBarItem(
+              icon: Image.asset(
+                Images.userBottom,
+                scale: 3,
+              ),
+              label: '',
+              activeIcon: Image.asset(Images.usersActive, scale: 3)),
+          BottomNavigationBarItem(icon: Image.asset(Images.homeBottom, scale: 3), label: '', activeIcon: Image.asset(Images.homeActive, scale: 3)),
+          BottomNavigationBarItem(icon: Image.asset(Images.newsBottom, scale: 3), label: '', activeIcon: Image.asset(Images.newsActive, scale: 3)),
+          BottomNavigationBarItem(icon: Image.asset(Images.profileBottom, scale: 3), label: '', activeIcon: Image.asset(Images.userActive, scale: 3)),
+          BottomNavigationBarItem(icon: Image.asset(Images.moreBottom, scale: 3), label: '', activeIcon: Image.asset(Images.moreActive, scale: 3)),
         ],
       ),
       body: Center(child: _widgetList[_currentIndex]),
-
     );
   }
+
   void onTapped(int index) {
     setState(() {
       _currentIndex = index;
     });
   }
 }
-
 
 class HomeWidget extends StatefulWidget {
   const HomeWidget({Key? key}) : super(key: key);
@@ -456,6 +455,7 @@ class HomeWidget extends StatefulWidget {
 class _HomeWidgetState extends State<HomeWidget> {
   List<String> imageArray = ['${Images.tech1}', '${Images.tech2}', '${Images.tech3}'];
   List<String> imageArray1 = ['${Images.blog1}', '${Images.blog2}', '${Images.blog2}'];
+
   @override
   Widget build(BuildContext context) {
     return ListView(physics: new ClampingScrollPhysics(), children: [
@@ -731,32 +731,37 @@ class _HomeWidgetState extends State<HomeWidget> {
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 itemCount: imageArray1.length,
-                itemBuilder: (BuildContext context, int index) => Container(
-                  height: 100,
-                  width: 170,
-                  child: Card(
-                    child: Column(
-                      // mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Image.asset(imageArray1[index]),
-                        Container(
-                            margin: const EdgeInsets.only(left: 0),
+                itemBuilder: (BuildContext context, int index) => GestureDetector(
+                  onTap: () {
+                    Get.toNamed(Routes.BLOG_INFo);
+                  },
+                  child: Container(
+                    height: 100,
+                    width: 170,
+                    child: Card(
+                      child: Column(
+                        // mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(imageArray1[index]),
+                          Container(
+                              margin: const EdgeInsets.only(left: 0),
+                              child: Text(
+                                "Lorem Ipsum",
+                                style: TextStyle(fontSize: 16, color: ThemeColors.blueTextColor, fontFamily: Fonts.robotoBold),
+                              )),
+                          Container(
+                            margin: const EdgeInsets.only(left: 15),
                             child: Text(
-                              "Lorem Ipsum",
-                              style: TextStyle(fontSize: 16, color: ThemeColors.blueTextColor, fontFamily: Fonts.robotoBold),
-                            )),
-                        Container(
-                          margin: const EdgeInsets.only(left: 15),
-                          child: Text(
-                            "Lorem ipsum dolor sit amet, consectetuer",
-                            style: TextStyle(fontSize: 14, color: ThemeColors.blueTextColor, fontFamily: Fonts.robotoLight),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        )
-                      ],
+                              "Lorem ipsum dolor sit amet, consectetuer",
+                              style: TextStyle(fontSize: 14, color: ThemeColors.blueTextColor, fontFamily: Fonts.robotoLight),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          )
+                        ],
+                      ),
+                      elevation: 10,
                     ),
-                    elevation: 10,
                   ),
                 ),
               ),
@@ -790,10 +795,10 @@ class _HomeWidgetState extends State<HomeWidget> {
             ///Text
             Center(
                 child: Text(
-                  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut ",
-                  style: TextStyle(fontSize: 15, color: ThemeColors.blueTextColor),
-                  textAlign: TextAlign.center,
-                )),
+              "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut ",
+              style: TextStyle(fontSize: 15, color: ThemeColors.blueTextColor),
+              textAlign: TextAlign.center,
+            )),
 
             ///image
             Stack(
@@ -811,8 +816,15 @@ class _HomeWidgetState extends State<HomeWidget> {
                   ),
                 ),
                 Container(
+                  decoration:const BoxDecoration(
+                      color: Colors.black26,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(10.0),
+                        bottomRight: Radius.circular(10.0),
+                      )),
                   height: 60,
-                  color: Colors.black26,
+                  // color: Colors.black26,
+                  // color: Colors.red,
                   margin: EdgeInsets.only(left: 20, right: 20, top: 120),
                 ),
                 Container(
@@ -848,8 +860,14 @@ class _HomeWidgetState extends State<HomeWidget> {
                   ),
                 ),
                 Container(
+                  decoration:const BoxDecoration(
+                      color: Colors.black26,
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(10.0),
+                        bottomRight: Radius.circular(10.0),
+                      )),
                   height: 60,
-                  color: Colors.black26,
+                  // color: Colors.black26,
                   margin: EdgeInsets.only(left: 20, right: 20, top: 120),
                 ),
                 Container(
@@ -875,6 +893,7 @@ class _HomeWidgetState extends State<HomeWidget> {
       )
     ]);
   }
+
   void onTapped(int index) {
     setState(() {
       _currentIndex = index;
