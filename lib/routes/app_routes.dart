@@ -8,6 +8,10 @@ abstract class Routes {
   static const SIGN_UP = '/signup';
   static const HOME = '/home';
   static const BLOG_INFo = '/blog_info';
+  static const CATEGORY = '/category';
+  static const CATEGORY_Info = '/category_info';
+  static const NEWS = '/news_screen';
+
 
 
 

@@ -39,13 +39,7 @@ dependencies:
   get_storage: ^2.0.3
   carousel_pro_nullsafety: ^1.0.2
   bottom_navy_bar: ^6.0.0
-#  flutter_lints: ^1.0.4
-#  flutter_lints: ^1.0.3
-#  bottom_bar_page_transition: ^2.0.0
-#  responsive_navigation_bar: ^2.2.2
-#  cuberto_bottom_bar: ^1.1.2+3
-#  salomon_bottom_bar: ^3.1.0
-#  carousel_pro: ^1.0.0
+  clippy_flutter: ^2.0.0-nullsafety.1
 
 dev_dependencies:
   flutter_test:

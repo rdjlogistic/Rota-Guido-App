@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:rota_guido/routes/app_pages.dart';
+import 'package:rota_guido/screen/category_screen/category_screen.dart';
+import 'package:rota_guido/screen/news_screen/news_screen.dart';
 
 import 'package:rota_guido/theme/colors.dart';
 import 'package:rota_guido/theme/fonts.dart';
@@ -28,10 +30,9 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _widgetList = [
     const Text('user'),
     const HomeWidget(),
-    const Text('Page Two'),
+    const NewsScreen(),
     const Text('Page Three'),
-    const Text('Page Four'),
-    const Text('Page five'),
+    const Category(),
   ];
 
   @override

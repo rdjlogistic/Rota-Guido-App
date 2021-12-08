@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rota_guido/theme/colors.dart';
+import 'package:rota_guido/theme/fonts.dart';
 import 'package:rota_guido/theme/image.dart';
 
 class CustomTextField extends StatefulWidget {
@@ -25,6 +26,7 @@ class CustomTextField extends StatefulWidget {
   String? fontFamily;
   int? maxLength;
   Color? hintColor = ThemeColors.textField;
+  Color? fillColor = ThemeColors.textField;
   TextEditingController? textEditingController = TextEditingController(text: "");
   FontWeight? fontWeight;
   bool? readOnly;
@@ -54,7 +56,8 @@ class CustomTextField extends StatefulWidget {
     this.prefixIcon,
     this.fontWeight = FontWeight.bold,
     this.readOnly = false,
-    this.maxLine ,
+    this.maxLine,
+    this.fillColor
   });
 
   @override
@@ -87,7 +90,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
         keyboardType: widget.keyboardType ?? TextInputType.text,
         inputFormatters: widget.inputFormatters ?? [],
         style: TextStyle(
-          color: ThemeColors.textColor,
+          color: ThemeColors.blueTextColor,
+          fontFamily: Fonts.robotoMedium,
           letterSpacing: 0.0,
           fontSize: widget.fontSize ?? 16.0,
         ),
@@ -111,7 +115,8 @@ class _CustomTextFieldState extends State<CustomTextField> {
           ),
           hintStyle: TextStyle(color: widget.hintColor, fontSize: widget.fontHintSize ?? 15.0, fontWeight: widget.fontWeight, fontFamily: widget.fontFamily ?? null),
           filled: true,
-          fillColor: ThemeColors.textFiledBackground,
+          // fillColor: ThemeColors.textFiledBackground,
+          fillColor: widget.fillColor,
           enabledBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(5.0)),
             borderSide: BorderSide(color: Colors.transparent),

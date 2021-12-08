@@ -7,6 +7,7 @@ import 'package:rota_guido/routes/app_pages.dart';
 import 'package:rota_guido/theme/colors.dart';
 import 'package:rota_guido/theme/fonts.dart';
 import 'package:rota_guido/theme/image.dart';
+import 'package:rota_guido/widgets/alert_view.dart';
 import 'package:rota_guido/widgets/button.dart';
 
 class BlogInfo extends StatefulWidget {
@@ -112,7 +113,16 @@ class _BlogInfoState extends State<BlogInfo> {
                   labelColor: ThemeColors.textField,
                   width: MediaQuery.of(context).size.width / 1.6,
                   isIcon: false,
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(
+                      barrierColor: Colors.black26,
+                      context: context,
+                      builder: (context) {
+                        return const CustomAlertDialog(
+                        );
+                      },
+                    );
+                  },
 
                 ),
               ),

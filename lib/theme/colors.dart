@@ -13,6 +13,11 @@ class ThemeColors {
   static Color blueTextColor  = const Color(0xFF262C54);
   static Color redTextColor  = const Color(0xFF963C0A);
 
+  static Color categoryG  = const Color(0xFFFFF6F0);
+  static Color categoryG1  = const Color(0xFFA34008);
+  static Color blueGrid = const Color(0xFF3268AC);
+  // static Color categoryG1  = const Color(0xFFEA7B3F);
+
 
 
 
