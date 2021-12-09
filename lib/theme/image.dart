@@ -86,6 +86,30 @@ class Images {
   static var c13 = '${images}13.png';
   static var c14 = '${images}14.png';
   static var c15 = '${images}15.png';
+  static var news1 = '${images}news1.png';
+  static var news2 = '${images}news2.png';
+  static var categoryLarge = '${images}category_large.png';
+
+
+  static var profile = '${images}profile.png';
+  static var user = '${images}user.png';
+  static var profileIcon1 = '${images}profile_icon1.png';
+  static var profileIcon2 = '${images}profile_icon2.png';
+  static var profileIcon3 = '${images}profile_icon3.png';
+  static var profileIcon4 = '${images}profile_icon4.png';
+  static var profileIcon5 = '${images}profile_icon5.png';
+  static var map = '${images}map.png';
+
+
+  static var smartFarm1 = '${images}smartfarm1.png';
+  static var effect1 = '${images}effect1.png';
+  static var effect2 = '${images}effect2.png';
+  static var icon40 = '${images}icon40.png';
+  static var verifyIcon = '${images}verifyicon.png';
+  static var smart = '${images}smart.png';
+
+
+
 
 
 

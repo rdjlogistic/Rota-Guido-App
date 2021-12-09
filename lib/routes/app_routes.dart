@@ -11,6 +11,9 @@ abstract class Routes {
   static const CATEGORY = '/category';
   static const CATEGORY_Info = '/category_info';
   static const NEWS = '/news_screen';
+  static const NEWSINFO = '/news_info';
+  static const PROFILE = '/profile_screen';
+  static const HOMELOGIN = '/home_login';
 
 
 

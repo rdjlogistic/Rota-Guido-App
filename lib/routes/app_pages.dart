@@ -2,9 +2,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:rota_guido/news_info/news_info.dart';
+import 'package:rota_guido/profile_screen/profile_screen.dart';
 import 'package:rota_guido/screen/blog_info/blog_info.dart';
 import 'package:rota_guido/screen/category_info/category_info.dart';
 import 'package:rota_guido/screen/category_screen/category_screen.dart';
+import 'package:rota_guido/screen/home_login/home_login.dart';
 import 'package:rota_guido/screen/home_screen/home_screen.dart';
 import 'package:rota_guido/screen/news_screen/news_screen.dart';
 import 'package:rota_guido/screen/sign_in_screen/signin_screen.dart';
@@ -65,6 +68,24 @@ class RouteGenerator {
       case Routes.NEWS:
         return GetPageRoute(
           page: () => NewsScreen(),
+          transition: Transition.fade,
+          transitionDuration: Duration(milliseconds: duration),
+        );
+      case Routes.NEWSINFO:
+        return GetPageRoute(
+          page: () => NewsInfo(),
+          transition: Transition.fade,
+          transitionDuration: Duration(milliseconds: duration),
+        );
+      case Routes.PROFILE:
+        return GetPageRoute(
+          page: () => Profile(),
+          transition: Transition.fade,
+          transitionDuration: Duration(milliseconds: duration),
+        );
+      case Routes.HOMELOGIN:
+        return GetPageRoute(
+          page: () => HomeLogin(),
           transition: Transition.fade,
           transitionDuration: Duration(milliseconds: duration),
         );

@@ -5,8 +5,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:rota_guido/profile_screen/profile_screen.dart';
 import 'package:rota_guido/routes/app_pages.dart';
 import 'package:rota_guido/screen/category_screen/category_screen.dart';
+import 'package:rota_guido/screen/home_login/home_login.dart';
 import 'package:rota_guido/screen/news_screen/news_screen.dart';
 
 import 'package:rota_guido/theme/colors.dart';
@@ -28,10 +30,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // int _currentIndex = 0;
   final List<Widget> _widgetList = [
-    const Text('user'),
+    const HomeLogin(),
     const HomeWidget(),
     const NewsScreen(),
-    const Text('Page Three'),
+    const Profile(),
     const Category(),
   ];
 
