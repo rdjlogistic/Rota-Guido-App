@@ -108,7 +108,15 @@ class Images {
   static var verifyIcon = '${images}verifyicon.png';
   static var smart = '${images}smart.png';
 
-
+  static var code1 = '${images}codice1.png';
+  static var code2 = '${images}codice2.png';
+  static var code3 = '${images}codice3.png';
+  static var code4 = '${images}codice4.png';
+  static var code5 = '${images}codice5.png';
+  static var code6 = '${images}codice6.png';
+  static var code7 = '${images}codice7.png';
+  static var code8 = '${images}codice8.png';
+  static var code9 = '${images}codice9.png';
 
 
 

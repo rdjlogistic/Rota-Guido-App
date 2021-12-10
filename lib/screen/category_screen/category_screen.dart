@@ -66,15 +66,77 @@ class MyApps extends StatelessWidget {
         //crossAxisCount: 3,
         crossAxisSpacing: 4.0,
         mainAxisSpacing: 8.0,
+        // children: List.generate(choices.length, (index) {
+        //   return Center(child: SelectCard(choice: choices[index]));
+
         children: List.generate(choices.length, (index) {
-          return Center(child: SelectCard(choice: choices[index]));
+          return GestureDetector(
+            onTap: (){
+              print("Index == >$index");
+              Get.toNamed(Routes.CATEGORY_Info);
+            },
+            child: Card(
+              elevation: 5,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
+              child: Container(
+                decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(10)), color: ThemeColors.colorPrimaryOrange),
+                // color: Colors.green,
+                height: 500,
+                child: Stack(
+                    children: <Widget>[
+                      Container(
+                          decoration: const BoxDecoration(
+                          ),
+                          height: 110,
+                          margin: const EdgeInsets.only(top: 75),
+                          child: ClipRRect(
+                              borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10.0), bottomRight: Radius.circular(10.0)),
+                              child: Image.asset(
+                                choices[index].image,
+                                fit: BoxFit.cover,
+                              ))),
+                      Container(
+                        margin: const EdgeInsets.only(top: 20),
+                        decoration: const BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(10)),
+                          // color: ThemeColors.textColor
+                        ),
+                        height: 80,
+                        width: 120,
+                        child: Diagonal(
+                          clipHeight: 25,
+                          axis: Axis.horizontal,
+                          position: DiagonalPosition.BOTTOM_LEFT,
+                          child: GestureDetector(
+                            // onTap: () => Navigator.pushNamed(context, '/diagonal_demo'),
+                            child: Container(
+                              color: ThemeColors.colorPrimaryOrange,
+                              width: 100.0,
+                              height: 100.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                      Container(
+                          margin: EdgeInsets.only(left: 5, top: 10),
+                          child: Text(
+                            choices[index].title.toString(),
+                            style: TextStyle(color: ThemeColors.whiteTextColor, fontFamily: Fonts.robotoMedium, fontSize: 14),
+                            maxLines: 4,
+                          )),
+                    ]),
+              ),
+            ),
+          );
+
         }));
   }
 }
 
 class Choice {
   Choice({this.title, this.icon, this.image});
-
   final String? title;
   final IconData? icon;
   final dynamic? image;
@@ -91,75 +153,3 @@ List<Choice> choices = <Choice>[
   Choice(title: 'Impianti Biogas e Biometano', icon: Icons.wifi, image: "${Images.newsImage}"),
 ];
 
-class SelectCard extends StatelessWidget {
-  const SelectCard({Key? key, this.choice}) : super(key: key);
-  final Choice? choice;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Get.toNamed(Routes.CATEGORY_Info);
-      },
-      child: Card(
-        elevation: 5,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(10.0)),
-        ),
-        child: Container(
-          decoration: BoxDecoration(borderRadius: const BorderRadius.all(Radius.circular(10)), color: ThemeColors.colorPrimaryOrange),
-          // color: Colors.green,
-          height: 500,
-          child: Stack(
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                // Expanded(child: Icon(choice!.icon, size:50.0, )),
-                Container(
-                    decoration: const BoxDecoration(
-                        // borderRadius:const BorderRadius.all(Radius.circular(10)),
-                        // color: ThemeColors.colorPrimaryOrange
-
-                        ),
-                    height: 110,
-                    margin: const EdgeInsets.only(top: 75),
-                    child: ClipRRect(
-                        borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10.0), bottomRight: Radius.circular(10.0)),
-                        child: Image.asset(
-                          choice!.image,
-                          fit: BoxFit.cover,
-                        ))),
-                Container(
-                  margin: const EdgeInsets.only(top: 20),
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    // color: ThemeColors.textColor
-                  ),
-                  height: 80,
-                  width: 120,
-                  child: Diagonal(
-                    clipHeight: 25,
-                    axis: Axis.horizontal,
-                    position: DiagonalPosition.BOTTOM_LEFT,
-                    child: GestureDetector(
-                      // onTap: () => Navigator.pushNamed(context, '/diagonal_demo'),
-                      child: Container(
-                        color: ThemeColors.colorPrimaryOrange,
-                        width: 100.0,
-                        height: 100.0,
-                      ),
-                    ),
-                  ),
-                ),
-                Container(
-                    margin: EdgeInsets.only(left: 5, top: 10),
-                    child: Text(
-                      choice!.title.toString(),
-                      style: TextStyle(color: ThemeColors.whiteTextColor, fontFamily: Fonts.robotoMedium, fontSize: 14),
-                      maxLines: 4,
-                    )),
-              ]),
-        ),
-      ),
-    );
-  }
-}

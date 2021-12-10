@@ -18,6 +18,7 @@ class ThemeColors {
   static Color blueGrid = const Color(0xFF3268AC);
   static Color divider = const Color(0xFF78849E);
   static Color lightBlue = const Color(0xFF6691D0);
+  static Color codeBlue = const Color(0xFF2A4A7B);
   // static Color categoryG1  = const Color(0xFFEA7B3F);
 
 

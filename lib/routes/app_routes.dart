@@ -14,6 +14,7 @@ abstract class Routes {
   static const NEWSINFO = '/news_info';
   static const PROFILE = '/profile_screen';
   static const HOMELOGIN = '/home_login';
+  static const REMOTEOPTION = '/Remote_option';
 
 
 
