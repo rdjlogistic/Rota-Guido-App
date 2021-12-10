@@ -118,6 +118,12 @@ class Images {
   static var code8 = '${images}codice8.png';
   static var code9 = '${images}codice9.png';
 
+  static var chart = '${images}chart.png';
+  static var chart1 = '${images}chart1.png';
+  static var progress = '${images}progress.png';
+  static var report = '${images}report.png';
+  static var temp = '${images}temp.png';
+
 
 
 

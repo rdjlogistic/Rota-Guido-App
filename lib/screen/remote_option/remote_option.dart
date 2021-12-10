@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:clippy_flutter/diagonal.dart';
+import 'package:expandable/expandable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -9,7 +10,7 @@ import 'package:rota_guido/routes/app_pages.dart';
 import 'package:rota_guido/theme/colors.dart';
 import 'package:rota_guido/theme/fonts.dart';
 import 'package:rota_guido/theme/image.dart';
-import 'package:rota_guido/widgets/button.dart';
+
 
 class RemoteOption extends StatefulWidget {
   const RemoteOption({Key? key}) : super(key: key);
@@ -22,34 +23,7 @@ class _RemoteOptionState extends State<RemoteOption> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*body: ListView(
-        // padding: const EdgeInsets.all(0),
-        // physics: const ClampingScrollPhysics(),
-        children: [
-          Container(
-            margin: EdgeInsets.only(top: 15,bottom: 20),
-            child: Row(
-              // crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(Images.icon40,scale: 2.5,),
-                SizedBox(width: 35),
-                Image.asset(Images.splashImage,scale: 10,),
 
-
-              ],
-            ),
-          ),
-          Container(
-            alignment: Alignment.center,
-            child: Text("Centro di controllo",style: TextStyle(fontSize: 32,fontFamily: Fonts.robotoBold,color: ThemeColors.codeBlue),),
-          ),
-
-
-
-
-        ],
-      ),*/
       body: SingleChildScrollView(
         child: Column(
           children: <Widget>[
@@ -88,7 +62,7 @@ class _RemoteOptionState extends State<RemoteOption> {
                   return GestureDetector(
                     onTap: (){
                       print("Index == >$index");
-                      // Get.toNamed(Routes.CATEGORY_Info);
+                      Get.toNamed(Routes.REMOTEINFO);
                     },
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -104,6 +78,8 @@ class _RemoteOptionState extends State<RemoteOption> {
                 })
             ),
             SizedBox(height: 20,),
+
+
 
 
 
@@ -160,3 +136,4 @@ List<Choice> choices = <Choice>[
   Choice(title: 'Lorem ipsum dolor sit amet', image: "${Images.code9}"),
 
 ];
+

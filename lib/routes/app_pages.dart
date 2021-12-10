@@ -10,6 +10,7 @@ import 'package:rota_guido/screen/category_screen/category_screen.dart';
 import 'package:rota_guido/screen/home_login/home_login.dart';
 import 'package:rota_guido/screen/home_screen/home_screen.dart';
 import 'package:rota_guido/screen/news_screen/news_screen.dart';
+import 'package:rota_guido/screen/remote_info/remote_info.dart';
 import 'package:rota_guido/screen/remote_option/remote_option.dart';
 import 'package:rota_guido/screen/sign_in_screen/signin_screen.dart';
 import 'package:rota_guido/screen/sign_up_screen/sign_up_screen.dart';
@@ -92,6 +93,11 @@ class RouteGenerator {
         ); case Routes.REMOTEOPTION:
         return GetPageRoute(
           page: () => RemoteOption(),
+          transition: Transition.fade,
+          transitionDuration: Duration(milliseconds: duration),
+        ); case Routes.REMOTEINFO:
+        return GetPageRoute(
+          page: () => RemoteInfo(),
           transition: Transition.fade,
           transitionDuration: Duration(milliseconds: duration),
         );

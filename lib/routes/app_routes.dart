@@ -15,6 +15,7 @@ abstract class Routes {
   static const PROFILE = '/profile_screen';
   static const HOMELOGIN = '/home_login';
   static const REMOTEOPTION = '/Remote_option';
+  static const REMOTEINFO = '/Remote_info';
 
 
 
