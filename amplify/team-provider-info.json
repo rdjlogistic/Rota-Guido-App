@@ -1,0 +1,15 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-rotaguidov2-staging-174044-authRole",
+      "UnauthRoleArn": "arn:aws:iam::099253623704:role/amplify-rotaguidov2-staging-174044-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::099253623704:role/amplify-rotaguidov2-staging-174044-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-rotaguidov2-staging-174044-deployment",
+      "UnauthRoleName": "amplify-rotaguidov2-staging-174044-unauthRole",
+      "StackName": "amplify-rotaguidov2-staging-174044",
+      "StackId": "arn:aws:cloudformation:us-east-1:099253623704:stack/amplify-rotaguidov2-staging-174044/a6e50450-4d4d-11ec-ac35-12988ac47947",
+      "AmplifyAppId": "d3ackekmwiwxof"
+    }
+  }
+}
