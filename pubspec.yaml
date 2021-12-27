@@ -44,6 +44,20 @@ dependencies:
 
   amplify_flutter: ^0.2.10
   amplify_api: ^0.2.10
+  amplify_auth_cognito: ^0.2.10
+  flutter_riverpod: ^0.13.1
+
+#  chewie: any
+#  video_player: any
+  chewie: ^1.2.2
+  video_player: ^2.2.9
+#  better_player: ^0.0.79
+#  chewie: ^1.2.2
+#  amplify_analytics_pinpoint: ^0.2.10
+
+#  amplify_core
+#  amplify_auth_cognito
+#  amplify_analytics_pinpoint
 
 dev_dependencies:
   flutter_test:

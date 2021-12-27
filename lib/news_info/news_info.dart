@@ -109,5 +109,5 @@ class _NewsInfoState extends State<NewsInfo> {
         )
       ]),
     );
-  }
+  } 
 }

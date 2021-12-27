@@ -1,13 +1,20 @@
+import 'package:amplify_api/amplify_api.dart';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
+import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/src/provider.dart';
 import 'package:get/get.dart';
+import 'package:rota_guido/aws_auth.dart';
+import 'package:rota_guido/providers.dart';
 import 'package:rota_guido/routes/app_pages.dart';
 import 'package:rota_guido/theme/colors.dart';
 import 'package:rota_guido/theme/fonts.dart';
 import 'package:rota_guido/theme/image.dart';
 import 'package:rota_guido/widgets/button.dart';
 import 'package:rota_guido/widgets/text_field.dart';
+import 'package:rota_guido/widgets/validation.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -21,9 +28,50 @@ class _RegisterState extends State<Register> {
   final _passwordTextController = TextEditingController(text: "");
   final _categoryTextController = TextEditingController(text: "");
   final _farmController = TextEditingController(text: "");
+  bool isChecked = false;
+
+  var email;
+  var password;
+  var category;
+  var farm;
+
+  exampleListNewsAPICall() async {
+    try {
+      String graphQLDocument = '''query MyQuery {
+  listNews {
+    items {
+      id
+      title {
+        textIT
+        textEN
+      }
+      _abstract {
+        textIT
+        textEN
+      }
+    }
+    nextToken
+  }
+}
+''';
+
+      var operation = Amplify.API.query(
+          request: GraphQLRequest<String>(
+        document: graphQLDocument,
+      ));
+
+      var response = await operation.response;
+      var data = response.data;
+
+      print('Query result: ' + data);
+    } on ApiException catch (e) {
+      print('Query failed: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    exampleListNewsAPICall();
     return GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
@@ -167,7 +215,39 @@ class _RegisterState extends State<Register> {
                             ),
                           ),
 
-                          const SizedBox(height: 100),
+                          const SizedBox(height: 10),
+                          Container(
+                            margin: EdgeInsets.only(left: 25),
+                            // alignment: Alignment.center,
+                            child: Stack(
+                              children: [
+                                Container(
+                                  alignment: Alignment.topLeft,
+                                  child: Checkbox(
+                                    side: BorderSide(color: ThemeColors.textColor, width: 2),
+                                    value: isChecked,
+                                    activeColor: ThemeColors.textColor,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        isChecked = value!;
+                                        print(value);
+                                      });
+                                    },
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(left: 45, top: 15),
+                                  alignment: Alignment.topLeft,
+                                  child: Text(
+                                    "Accetto la privacy ed i Termini del servizio",
+                                    style: TextStyle(color: ThemeColors.textColor, fontFamily: Fonts.robotoMedium, fontSize: 15),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          const SizedBox(height: 40),
                           // const SizedBox(height: 50),
 
                           ///Login Button
@@ -177,12 +257,100 @@ class _RegisterState extends State<Register> {
                             alignment: Alignment.center,
                             child: CustomButton(
                               height: 50,
-                              label: "Login",
+                              label: "Register",
                               labelColor: ThemeColors.textField,
                               width: MediaQuery.of(context).size.width / 1.5,
                               isIcon: true,
-                              onPressed: () {
-                                Get.toNamed(Routes.HOME);
+                              onPressed: () async {
+                                email = _emailTextController.text.trim();
+                                password = _passwordTextController.text.trim();
+                                category = _categoryTextController.text.trim();
+                                farm = _farmController.text.trim();
+
+                                if (_emailTextController.text.toString().trim().isEmpty) {
+                                  Get.snackbar(
+                                    "error",
+                                    "please enter Valid Email....",
+                                    icon: Icon(Icons.error, color: Colors.redAccent),
+                                    snackPosition: SnackPosition.TOP,
+                                    backgroundColor: Colors.black26,
+                                    borderRadius: 20,
+                                    margin: EdgeInsets.all(15),
+                                    colorText: Colors.white,
+                                    duration: Duration(seconds: 4),
+                                    isDismissible: true,
+                                    // dismissDirection: SnackDismissDirection.HORIZONTAL,
+                                    forwardAnimationCurve: Curves.easeOutBack,
+                                  );
+                                } else if (!isValidEmail.hasMatch(email)) {
+                                  // valid email id
+                                  Get.snackbar(
+                                    "error",
+                                    "Please enter valid email...",
+                                    icon: Icon(Icons.error, color: Colors.redAccent),
+                                    snackPosition: SnackPosition.TOP,
+                                    backgroundColor: Colors.black26,
+                                    borderRadius: 20,
+                                    margin: EdgeInsets.all(15),
+                                    colorText: Colors.white,
+                                    duration: Duration(seconds: 4),
+                                    isDismissible: true,
+                                    // dismissDirection: SnackDismissDirection.HORIZONTAL,
+                                    forwardAnimationCurve: Curves.easeOutBack,
+                                  );
+                                } else if (_passwordTextController.text.toString().trim().isEmpty) {
+                                  Get.snackbar(
+                                    "error",
+                                    "please enter Valid Password....",
+                                    icon: Icon(Icons.error, color: Colors.redAccent),
+                                    snackPosition: SnackPosition.TOP,
+                                    backgroundColor: Colors.black26,
+                                    borderRadius: 20,
+                                    margin: EdgeInsets.all(15),
+                                    colorText: Colors.white,
+                                    duration: Duration(seconds: 4),
+                                    isDismissible: true,
+                                    // dismissDirection: SnackDismissDirection.HORIZONTAL,
+                                    forwardAnimationCurve: Curves.easeOutBack,
+                                  );
+                                } else if (!isValidPassword.hasMatch(password)) {
+                                  // valid email id
+                                  Get.snackbar(
+                                    "error",
+                                    "Please enter valid Password...",
+                                    icon: Icon(Icons.error, color: Colors.redAccent),
+                                    snackPosition: SnackPosition.TOP,
+                                    backgroundColor: Colors.black26,
+                                    borderRadius: 20,
+                                    margin: EdgeInsets.all(15),
+                                    colorText: Colors.white,
+                                    duration: Duration(seconds: 4),
+                                    isDismissible: true,
+                                    // dismissDirection: SnackDismissDirection.HORIZONTAL,
+                                    forwardAnimationCurve: Curves.easeOutBack,
+                                  );
+                                } else if (isChecked != false) {
+                                  // valid email id
+                                  Get.snackbar(
+                                    "error",
+                                    "Please enter valid Password...",
+                                    icon: Icon(Icons.error, color: Colors.redAccent),
+                                    snackPosition: SnackPosition.TOP,
+                                    backgroundColor: Colors.black26,
+                                    borderRadius: 20,
+                                    margin: EdgeInsets.all(15),
+                                    colorText: Colors.white,
+                                    duration: Duration(seconds: 4),
+                                    isDismissible: true,
+                                    // dismissDirection: SnackDismissDirection.HORIZONTAL,
+                                    forwardAnimationCurve: Curves.easeOutBack,
+                                  );
+                                } else {
+                                  final authAWSRepo = context.read(authAWSRepositoryProvider);
+                                  await authAWSRepo.signUp(_emailTextController.text, _passwordTextController.text);
+                                  context.refresh(authUserProvider);
+                                  Get.toNamed(Routes.HOME);
+                                }
                               },
                               icon: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,

@@ -40,6 +40,7 @@ exampleListNewsAPICall() async {
     var operation = Amplify.API.query(
         request: GraphQLRequest<String>(
       document: graphQLDocument,
+
     ));
 
     var response = await operation.response;

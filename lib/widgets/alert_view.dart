@@ -87,7 +87,8 @@ class _CustomAlertDialogState extends State<CustomAlertDialog> {
       ),
       child: SingleChildScrollView(
         child: Container(
-          height: Get.height/1.1,
+          // height: Get.height/1.1,
+          height: 600,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
