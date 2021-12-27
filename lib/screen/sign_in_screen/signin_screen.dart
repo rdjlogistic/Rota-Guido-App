@@ -31,7 +31,7 @@ class _SignInScreeanState extends State<SignInScreean> {
   var emailId;
   var password;
 
-  /* exampleListNewsAPICall() async {
+/*   exampleListNewsAPICall() async {
     try {
       String graphQLDocument = '''query {
 listUserCategories(filter: {isActive: {eq:
@@ -274,7 +274,7 @@ textEN }
                                           // dismissDirection: SnackDismissDirection.HORIZONTAL,
                                           forwardAnimationCurve: Curves.easeOutBack,
                                         );
-                                      } else if (!isValidPassword.hasMatch(password)) {
+                                      } else if (_passwordTextController.text.toString().trim().length<8) {
                                         // valid email id
                                         Get.snackbar(
                                           "error",
@@ -350,6 +350,18 @@ textEN }
                       },
                       child: Text(
                         "Registrati",
+                        style: TextStyle(color: ThemeColors.textColor, fontFamily: Fonts.robotoMedium, fontSize: 18),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.bottomCenter,
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.toNamed(Routes.HOME);
+                      },
+                      child: Text(
+                        "navigate without  ",
                         style: TextStyle(color: ThemeColors.textColor, fontFamily: Fonts.robotoMedium, fontSize: 18),
                       ),
                     ),

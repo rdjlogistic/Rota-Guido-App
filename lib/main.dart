@@ -30,44 +30,22 @@ class _MyAppState extends State<MyApp> {
 
   }
 
-  /*void _configureAmplify() async {
-    await Amplify.addPlugins([AmplifyAuthCognito()]);
-    await Amplify.configure(amplifyconfig);
-    setState(() {
-      _amplifyConfigured = true;
-      print(_amplifyConfigured);
-    });
 
+  void _configureAmplify() async {
+    // Add the following line to add API plugin to your app.
+    // Auth plugin needed for IAM authorization mode, which is default for REST API.
+    Amplify.addPlugins([AmplifyAPI(), AmplifyAuthCognito()]);
 
-    // Add the following line to add API plugin to your app
-    Amplify.addPlugin(AmplifyAPI());
     try {
       await Amplify.configure(amplifyconfig);
     } on AmplifyAlreadyConfiguredException {
-
       print(
           "Tried to reconfigure Amplify; this can occur when your app restarts on Android.");
     }
-
-  }*/
-
-
-  Future<void> _configureAmplify() async {
-
-    await Amplify.addPlugins([AmplifyAuthCognito()]);
-    await Amplify.configure(amplifyconfig);
-    setState(() {
-      _amplifyConfigured = true;
-    });
-
-    try {
-      await Amplify.addPlugin(AmplifyAuthCognito());
-      await Amplify.configure(amplifyconfig);
-    } on Exception catch (e) {
-      print('Could not configure Amplify: $e');
-    }
-
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {

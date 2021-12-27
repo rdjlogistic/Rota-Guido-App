@@ -30,6 +30,20 @@ const amplifyconfig = ''' {
                         "ApiKey": "da2-fakeApiId123456",
                         "ClientDatabasePrefix": "rotaguidov2_API_KEY",
                         "DangerouslyConnectToHTTPEndpointForTesting": true
+                    },
+                    "rotaguidov2_AWS_IAM": {
+                        "ApiUrl": "http://192.168.0.72:20002/graphql",
+                        "Region": "us-east-1",
+                        "AuthMode": "AWS_IAM",
+                        "ClientDatabasePrefix": "rotaguidov2_AWS_IAM",
+                        "DangerouslyConnectToHTTPEndpointForTesting": true
+                    },
+                    "rotaguidov2_AMAZON_COGNITO_USER_POOLS": {
+                        "ApiUrl": "http://192.168.0.72:20002/graphql",
+                        "Region": "us-east-1",
+                        "AuthMode": "AMAZON_COGNITO_USER_POOLS",
+                        "ClientDatabasePrefix": "rotaguidov2_AMAZON_COGNITO_USER_POOLS",
+                        "DangerouslyConnectToHTTPEndpointForTesting": true
                     }
                 },
                 "CredentialsProvider": {
