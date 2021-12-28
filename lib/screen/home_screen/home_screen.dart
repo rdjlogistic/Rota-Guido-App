@@ -5,6 +5,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:rota_guido/key.dart';
 import 'package:rota_guido/profile_screen/profile_screen.dart';
 import 'package:rota_guido/routes/app_pages.dart';
 import 'package:rota_guido/screen/category_screen/category_screen.dart';
@@ -25,6 +27,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final storage = GetStorage();
+
   List<String> imageArray = ['${Images.tech1}', '${Images.tech2}', '${Images.tech3}'];
   List<String> imageArray1 = ['${Images.blog1}', '${Images.blog2}', '${Images.blog2}'];
 
@@ -36,6 +40,12 @@ class _HomeScreenState extends State<HomeScreen> {
     const Profile(),
     const Category(),
   ];
+
+  @override
+  void initState() {
+    print(storage.read(signTrue));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

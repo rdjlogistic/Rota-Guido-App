@@ -31,34 +31,10 @@ class _SignInScreeanState extends State<SignInScreean> {
   var emailId;
   var password;
 
-/*   exampleListNewsAPICall() async {
-    try {
-      String graphQLDocument = '''query {
-listUserCategories(filter: {isActive: {eq:
-true}}) { items {
-id name {
-textEN }
-} }
-}
-''';
 
-      var operation = Amplify.API.query(
-          request: GraphQLRequest<String>(
-        document: graphQLDocument,
-      ));
-
-      var response = await operation.response;
-      var data = response.data;
-
-      print('Query result: ' + data);
-    } on ApiException catch (e) {
-      print('Query failed: $e');
-    }
-  }*/
 
   @override
   Widget build(BuildContext context) {
-    // exampleListNewsAPICall();
 
     return GestureDetector(
         onTap: () {
@@ -290,11 +266,11 @@ textEN }
                                           // dismissDirection: SnackDismissDirection.HORIZONTAL,
                                           forwardAnimationCurve: Curves.easeOutBack,
                                         );
-                                      } else if (isChecked != false) {
+                                      } else if (isChecked == false) {
                                         // valid email id
                                         Get.snackbar(
                                           "error",
-                                          "Please enter valid Password...",
+                                          "Please Accept Recorda accesso ..",
                                           icon: Icon(Icons.error, color: Colors.redAccent),
                                           snackPosition: SnackPosition.TOP,
                                           backgroundColor: Colors.black26,
@@ -306,7 +282,7 @@ textEN }
                                           // dismissDirection: SnackDismissDirection.HORIZONTAL,
                                           forwardAnimationCurve: Curves.easeOutBack,
                                         );
-                                      } else {
+                                      }else {
                                         ///api calling
 
                                         final authAWSRepo = context.read(authAWSRepositoryProvider);
@@ -354,18 +330,7 @@ textEN }
                       ),
                     ),
                   ),
-                  Container(
-                    alignment: Alignment.bottomCenter,
-                    child: GestureDetector(
-                      onTap: () {
-                        Get.toNamed(Routes.HOME);
-                      },
-                      child: Text(
-                        "navigate without  ",
-                        style: TextStyle(color: ThemeColors.textColor, fontFamily: Fonts.robotoMedium, fontSize: 18),
-                      ),
-                    ),
-                  ),
+
                   const SizedBox(
                     height: 10,
                   )

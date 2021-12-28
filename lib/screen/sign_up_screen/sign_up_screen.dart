@@ -28,6 +28,7 @@ class _RegisterState extends State<Register> {
   final _passwordTextController = TextEditingController(text: "");
   final _categoryTextController = TextEditingController(text: "");
   final _farmController = TextEditingController(text: "");
+  final _controller = TextEditingController(text: "");
   bool isChecked = false;
 
   var email;
@@ -35,24 +36,19 @@ class _RegisterState extends State<Register> {
   var category;
   var farm;
 
-  exampleListNewsAPICall() async {
+  String dropdownValue = 'One';
+
+
+  getCategoryList() async {
     try {
-      String graphQLDocument = '''query MyQuery {
-  listNews {
-    items {
-      id
-      title {
-        textIT
-        textEN
-      }
-      _abstract {
-        textIT
-        textEN
-      }
-    }
-    nextToken
-  }
+      String graphQLDocument = '''query {
+listUserCategories(filter: {isActive: {eq:
+true}}) { items {
+id name {
+textEN }
+} }
 }
+
 ''';
 
       var operation = Amplify.API.query(
@@ -71,7 +67,8 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    exampleListNewsAPICall();
+    getCategoryList();
+
     return GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
@@ -215,6 +212,30 @@ class _RegisterState extends State<Register> {
                             ),
                           ),
 
+                        /*  const SizedBox(height: 10),
+                          Container(
+                              margin: EdgeInsets.only(left: 30, right: 30),
+                              child: DropdownButton<String>(
+                                value: dropdownValue,
+                                // icon: const Icon(Icons.arrow_downward),
+                                elevation: 16,
+                                style: const TextStyle(color: Colors.deepPurple),
+                                underline: Container(
+                                  height: 2,
+                                  // color: Colors.deepPurpleAccent,
+                                ),
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    dropdownValue = newValue!;
+                                  });
+                                },
+                                items: <String>['One', 'Two', 'Free', 'Four'].map<DropdownMenuItem<String>>((String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                              )),*/
                           const SizedBox(height: 10),
                           Container(
                             margin: EdgeInsets.only(left: 25),
@@ -250,7 +271,7 @@ class _RegisterState extends State<Register> {
                           const SizedBox(height: 40),
                           // const SizedBox(height: 50),
 
-                          ///Login Button
+                          ///SignUp Button
                           Container(
                             // margin: const EdgeInsets.only(top: 100),
                             // height: MediaQuery.of(context).size.height / 3.5,
@@ -313,7 +334,7 @@ class _RegisterState extends State<Register> {
                                     // dismissDirection: SnackDismissDirection.HORIZONTAL,
                                     forwardAnimationCurve: Curves.easeOutBack,
                                   );
-                                } else if (!isValidPassword.hasMatch(password)) {
+                                } else if (_passwordTextController.text.toString().trim().length < 8) {
                                   // valid email id
                                   Get.snackbar(
                                     "error",
@@ -329,11 +350,26 @@ class _RegisterState extends State<Register> {
                                     // dismissDirection: SnackDismissDirection.HORIZONTAL,
                                     forwardAnimationCurve: Curves.easeOutBack,
                                   );
-                                } else if (isChecked != false) {
+                                } else if (_farmController.text.toString().trim().isEmpty) {
+                                  Get.snackbar(
+                                    "error",
+                                    "please enter Azienda....",
+                                    icon: Icon(Icons.error, color: Colors.redAccent),
+                                    snackPosition: SnackPosition.TOP,
+                                    backgroundColor: Colors.black26,
+                                    borderRadius: 20,
+                                    margin: EdgeInsets.all(15),
+                                    colorText: Colors.white,
+                                    duration: Duration(seconds: 4),
+                                    isDismissible: true,
+                                    // dismissDirection: SnackDismissDirection.HORIZONTAL,
+                                    forwardAnimationCurve: Curves.easeOutBack,
+                                  );
+                                } else if (isChecked == false) {
                                   // valid email id
                                   Get.snackbar(
                                     "error",
-                                    "Please enter valid Password...",
+                                    "Please Accept Privacy ..",
                                     icon: Icon(Icons.error, color: Colors.redAccent),
                                     snackPosition: SnackPosition.TOP,
                                     backgroundColor: Colors.black26,
@@ -347,9 +383,23 @@ class _RegisterState extends State<Register> {
                                   );
                                 } else {
                                   final authAWSRepo = context.read(authAWSRepositoryProvider);
-                                  await authAWSRepo.signUp(_emailTextController.text, _passwordTextController.text);
+                                  await authAWSRepo.signUp(_emailTextController.text, _passwordTextController.text, _farmController.text, isChecked);
                                   context.refresh(authUserProvider);
-                                  Get.toNamed(Routes.HOME);
+                                  Get.snackbar(
+                                    "Success",
+                                    "Your Account Create Successfully  ",
+                                    icon: Icon(Icons.done, color: Colors.green),
+                                    snackPosition: SnackPosition.TOP,
+                                    backgroundColor: Colors.black26,
+                                    borderRadius: 20,
+                                    margin: EdgeInsets.all(15),
+                                    colorText: Colors.white,
+                                    duration: Duration(seconds: 4),
+                                    isDismissible: true,
+                                    // dismissDirection: SnackDismissDirection.HORIZONTAL,
+                                    forwardAnimationCurve: Curves.easeOutBack,
+                                  );
+                                  Get.toNamed(Routes.SIGN_IN);
                                 }
                               },
                               icon: Row(

@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/src/provider.dart';
 import 'package:get/get.dart';
 import 'package:rota_guido/aws_auth.dart';
+import 'package:rota_guido/key.dart';
 import 'package:rota_guido/providers.dart';
 import 'package:rota_guido/routes/app_pages.dart';
 import 'package:rota_guido/theme/colors.dart';
@@ -213,6 +214,7 @@ class _ProfileState extends State<Profile> {
                               final authAWSRepo = context.read(authAWSRepositoryProvider);
                               await authAWSRepo.logOut();
                               context.refresh(authUserProvider);
+                              storage.write(signTrue,false);
                               Get.offAllNamed(Routes.SIGN_IN);
                             },
                             icon: Row(

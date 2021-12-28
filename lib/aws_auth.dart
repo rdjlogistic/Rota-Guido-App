@@ -1,11 +1,18 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:rota_guido/key.dart';
 import 'package:rota_guido/routes/app_pages.dart';
 import 'package:rota_guido/screen/home_screen/home_screen.dart';
+
+
+final storage = GetStorage();
 
 /// Provides methods to interact with Firebase Authentication.
 final authAWSRepositoryProvider = Provider<AWSAuthRepository>((ref) => AWSAuthRepository());
@@ -24,13 +31,54 @@ class AWSAuthRepository {
   }
 
   /// Creates a new user with the provided [email] and [password].
-  Future<void> signUp(String email, String password) async {
+  Future<void> signUp(String email, String password,String company,bool privacy) async {
     try {
       final CognitoSignUpOptions options = CognitoSignUpOptions(userAttributes: {'email': email});
       await Amplify.Auth.signUp(username: email, password: password, options: options);
-      Get.toNamed(Routes.HOME);
-    } /*on Exception {
 
+          String graphQLDocument = '''mutation (\$input : CreateUserInput!){
+  createUser (input:\$input) 
+    {
+    id
+    company
+    email
+  }
+}
+
+''';
+
+          var operation = Amplify.API.query(
+              request: GraphQLRequest<String>(
+                document: graphQLDocument,
+                variables: {
+                  "input": {
+                    "email": email,
+                    "company": company,
+                    // "signupDate": "[current date]",
+                    // "userCategoryId": "[UserCategoy.id selected in the “Categoria” select ]",
+                    "hasPrivacyPolicy": privacy,
+                    // "privacyPolicyDate": "[current date]",
+                    "hasTos": true,
+                    // "tosDate": "[current date]",
+                    "authProviderId": ""
+                  }
+                }
+              ));
+
+          var response = await operation.response;
+          var data = response.data;
+          var temp = jsonDecode(data);
+          print("data Success ==> ${temp["createUser"]["id"]}");
+
+          storage.write(loginID, temp["createUser"]["id"]);
+
+          print('Query result: ' + data);
+          // Get.toNamed(Routes.HOME);
+          Get.offAll(HomeScreen());
+        } on ApiException catch (e) {
+          print('Query failed: $e');
+
+    } /*on Exception {
 
       rethrow;
 
@@ -70,6 +118,7 @@ class AWSAuthRepository {
   Future<void> signIn(String email, String password) async {
     try {
       await Amplify.Auth.signIn(username: email, password: password);
+      storage.write(signTrue, true);
       Get.offAll(HomeScreen());
       // Get.offAllNamed(Routes.HOME);
     }
