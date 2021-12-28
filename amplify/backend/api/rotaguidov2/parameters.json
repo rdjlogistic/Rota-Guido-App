@@ -1,0 +1,12 @@
+{
+  "AppSyncApiName": "rotaguidov2",
+  "DynamoDBBillingMode": "PAY_PER_REQUEST",
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthModeLastUpdated": "2021-12-26T19:16:23.151Z",
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "authRotaGuidoV2",
+      "Outputs.UserPoolId"
+    ]
+  }
+}

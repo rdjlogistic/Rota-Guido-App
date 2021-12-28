@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "rotaguidov2",
+    "serviceName": "AppSync",
+    "gqlSchemaPath": "/tmp/amplify-647bcfc9-0f80-4ff0-bd85-b72da05bbcb9/amplify/backend/api/rotaguidov2/schema.graphql",
+    "defaultAuthType": {
+      "mode": "API_KEY",
+      "keyDescription": "api key description",
+      "expirationTime": 30
+    },
+    "conflictResolution": {
+      "defaultResolutionStrategy": {
+        "type": "AUTOMERGE"
+      }
+    },
+    "additionalAuthTypes": [
+      {
+        "mode": "AWS_IAM"
+      },
+      {
+        "mode": "AMAZON_COGNITO_USER_POOLS",
+        "cognitoUserPoolId": "authRotaGuidoV2"
+      }
+    ]
+  }
+}

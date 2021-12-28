@@ -1,0 +1,16 @@
+{
+  "resourceName": "s3rotaguidov2storaged3ackekmwiwxof",
+  "bucketName": "rotaguidov2-storage-d3ackekmwiwxof",
+  "policyUUID": "91c92099",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ]
+}
