@@ -1,6 +1,7 @@
 class Images {
   static var assets = 'assets/';
   static var images = '${assets}images/';
+  static var progressJson = '${assets}progress/';
 
 
   ///Splash Screen
@@ -124,11 +125,6 @@ class Images {
   static var report = '${images}report.png';
   static var temp = '${images}temp.png';
 
-
-
-
-
-
-
+  static var Loging = '${progressJson}progress.json';
 
 }

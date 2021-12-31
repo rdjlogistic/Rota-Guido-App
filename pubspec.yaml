@@ -46,22 +46,25 @@ dependencies:
   amplify_api: ^0.2.10
   amplify_auth_cognito: ^0.2.10
   flutter_riverpod: ^0.13.1
+  lottie: ^1.2.1
+#  i18n_extension: ^4.2.0
 
-#  chewie: any
-#  video_player: any
   chewie: ^1.2.2
   video_player: ^2.2.9
-#  better_player: ^0.0.79
-#  chewie: ^1.2.2
-#  amplify_analytics_pinpoint: ^0.2.10
 
-#  amplify_core
-#  amplify_auth_cognito
-#  amplify_analytics_pinpoint
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  i18n_extension:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+#  flutter_localizations: # Annotations for the flutter_sheet_localization_generator package.
+#    sdk: flutter # Annotations for the flutter_sheet_localization_generator package.
+#
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -84,6 +87,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/progress/
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

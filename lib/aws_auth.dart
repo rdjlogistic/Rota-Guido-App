@@ -10,6 +10,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:rota_guido/key.dart';
 import 'package:rota_guido/routes/app_pages.dart';
 import 'package:rota_guido/screen/home_screen/home_screen.dart';
+import 'package:rota_guido/widgets/progress.dart';
 
 
 final storage = GetStorage();
@@ -31,8 +32,12 @@ class AWSAuthRepository {
   }
 
   /// Creates a new user with the provided [email] and [password].
-  Future<void> signUp(String email, String password,String company,bool privacy) async {
+  Future<void> signUp(String email, String password,String company,bool privacy,{bool isLoading = true} ) async {
     try {
+      if (isLoading) {
+        Get.dialog(LoadingDialog(width: 70, height: 70), barrierDismissible: false);
+      }
+
       final CognitoSignUpOptions options = CognitoSignUpOptions(userAttributes: {'email': email});
       await Amplify.Auth.signUp(username: email, password: password, options: options);
 
@@ -65,9 +70,14 @@ class AWSAuthRepository {
                 }
               ));
 
+
+
           var response = await operation.response;
           var data = response.data;
           var temp = jsonDecode(data);
+      if (isLoading && Get.isDialogOpen!) {
+        Get.back();
+      }
           print("data Success ==> ${temp["createUser"]["id"]}");
 
           storage.write(loginID, temp["createUser"]["id"]);
@@ -101,6 +111,9 @@ class AWSAuthRepository {
         // dismissDirection: SnackDismissDirection.HORIZONTAL,
         forwardAnimationCurve: Curves.easeOutBack,
       );
+      if (isLoading && Get.isDialogOpen!) {
+        Get.back();
+      }
     }
 
   }
@@ -115,12 +128,19 @@ class AWSAuthRepository {
   }
 
   /// Creates a new user with the provided [email] and [password].
-  Future<void> signIn(String email, String password) async {
+  Future<void> signIn(String email, String password,{bool isLoading = true}) async {
     try {
+      if (isLoading) {
+        Get.dialog(LoadingDialog(width: 70, height: 70), barrierDismissible: false);
+      }
+
       await Amplify.Auth.signIn(username: email, password: password);
       storage.write(signTrue, true);
-      Get.offAll(HomeScreen());
-      // Get.offAllNamed(Routes.HOME);
+      if (isLoading && Get.isDialogOpen!) {
+        Get.back();
+      }
+      // Get.offAll(HomeScreen());
+      Get.offAllNamed(Routes.HOME);
     }
     on AuthException catch (e) {
       print(e.message);
@@ -139,14 +159,25 @@ class AWSAuthRepository {
         // dismissDirection: SnackDismissDirection.HORIZONTAL,
         forwardAnimationCurve: Curves.easeOutBack,
       );
+      if (isLoading && Get.isDialogOpen!) {
+        Get.back();
+      }
     }
+
   }
 
   /// Signs out the current user which will emit
   /// [User.empty] from the [user] Stream.
-  Future<void> logOut() async {
+  Future<void> logOut({bool isLoading = true}) async {
     try {
+      if (isLoading) {
+        Get.dialog(LoadingDialog(width: 70, height: 70), barrierDismissible: false);
+      }
       await Amplify.Auth.signOut();
+      if (isLoading && Get.isDialogOpen!) {
+        Get.back();
+      }
+
     } on Exception {
       rethrow;
     }

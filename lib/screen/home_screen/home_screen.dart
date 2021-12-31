@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:amplify_api/amplify_api.dart';
+import 'package:amplify_flutter/amplify.dart';
 import 'package:carousel_pro_nullsafety/carousel_pro_nullsafety.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -469,8 +471,96 @@ class _HomeWidgetState extends State<HomeWidget> {
   List<String> imageArray = ['${Images.tech1}', '${Images.tech2}', '${Images.tech3}'];
   List<String> imageArray1 = ['${Images.blog1}', '${Images.blog2}', '${Images.blog2}'];
 
+  getAllPagesWithSliderAndSlides() async {
+    try {
+      String graphQLDocument = '''query AllPagesWithSliderAndSlides { listPages(filter: {isActive: {eq: true}}) {
+items { name {
+textEN }
+slider { id
+isActive slides {
+items { index
+name { textEN
+} caption {
+textEN }
+media { file {
+bucket key region
+}
+kind mimeType
+}
+destination }
+} }
+} }
+}
+
+''';
+
+      var operation = Amplify.API.query(
+          request: GraphQLRequest<String>(
+        document: graphQLDocument,
+      ));
+
+      var response = await operation.response;
+      var data = response.data;
+
+      print('Query result: ' + data);
+    } on ApiException catch (e) {
+      print('Query failed: $e');
+    }
+  }
+  getHomePageCategoriesProducts() async {
+    try {
+      String graphQLDocument = '''query HomePageCategoriesProducts {
+  listProductCategories(
+    filter: {isVisible: {eq: true}, isInHomePage: {eq: true}}
+    limit: 2
+  ) {
+    items {
+      name {
+        textEN
+      }
+      products {
+        items {
+          product {
+            id
+            name {
+              textEN
+            }
+            subtitle {
+              textEN
+            }
+            image {
+              file {
+                key
+                bucket
+                region
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+''';
+
+      var operation = Amplify.API.query(
+          request: GraphQLRequest<String>(
+        document: graphQLDocument,
+      ));
+
+      var response = await operation.response;
+      var data = response.data;
+
+      print('Query result: ' + data);
+    } on ApiException catch (e) {
+      print('Query failed: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    getAllPagesWithSliderAndSlides();
+    getHomePageCategoriesProducts();
     return ListView(physics: new ClampingScrollPhysics(), children: [
       SingleChildScrollView(
         child: Column(
@@ -829,7 +919,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                   ),
                 ),
                 Container(
-                  decoration:const BoxDecoration(
+                  decoration: const BoxDecoration(
                       color: Colors.black26,
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(10.0),
@@ -873,7 +963,7 @@ class _HomeWidgetState extends State<HomeWidget> {
                   ),
                 ),
                 Container(
-                  decoration:const BoxDecoration(
+                  decoration: const BoxDecoration(
                       color: Colors.black26,
                       borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(10.0),

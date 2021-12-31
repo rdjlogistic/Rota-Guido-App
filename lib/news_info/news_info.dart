@@ -1,3 +1,5 @@
+import 'package:amplify_api/amplify_api.dart';
+import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rota_guido/theme/colors.dart';
@@ -14,6 +16,57 @@ class NewsInfo extends StatefulWidget {
 }
 
 class _NewsInfoState extends State<NewsInfo> {
+
+  getHomePageCategoriesProducts() async {
+    try {
+      String graphQLDocument = '''query HomePageCategoriesProducts {
+  listProductCategories(
+    filter: {isVisible: {eq: true}, isInHomePage: {eq: true}}
+    limit: 2
+  ) {
+    items {
+      name {
+        textEN
+      }
+      products {
+        items {
+          product {
+            id
+            name {
+              textEN
+            }
+            subtitle {
+              textEN
+            }
+            image {
+              file {
+                key
+                bucket
+                region
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+''';
+
+      var operation = Amplify.API.query(
+          request: GraphQLRequest<String>(
+            document: graphQLDocument,
+          ));
+
+      var response = await operation.response;
+      var data = response.data;
+
+      print('Query result: ' + data);
+    } on ApiException catch (e) {
+      print('Query failed: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -6,6 +6,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/src/provider.dart';
 import 'package:get/get.dart';
 import 'package:rota_guido/aws_auth.dart';
+import 'package:rota_guido/localization/i18n.dart';
+
+
 import 'package:rota_guido/providers.dart';
 import 'package:rota_guido/routes/app_pages.dart';
 import 'package:rota_guido/theme/colors.dart';
@@ -88,7 +91,7 @@ class _SignInScreeanState extends State<SignInScreean> {
                                 Container(
                                     alignment: Alignment.topCenter,
                                     child: Text(
-                                      "Login",
+                                      "Login".i18n,
                                       style: TextStyle(fontFamily: Fonts.robotoBold, fontSize: 32, color: ThemeColors.colorPrimaryOrange),
                                     )),
 
@@ -97,7 +100,7 @@ class _SignInScreeanState extends State<SignInScreean> {
                                 ///Text Filed Email
                                 CustomTextField(
                                   textEditingController: _emailTextController,
-                                  hint: "Email",
+                                  hint: "Email".i18n,
                                   fontWeight: FontWeight.normal,
                                   fontFamily: Fonts.robotoMedium,
                                   hintColor: ThemeColors.textColor,
@@ -120,7 +123,7 @@ class _SignInScreeanState extends State<SignInScreean> {
                                 ///Text Filed Email
                                 CustomTextField(
                                   textEditingController: _passwordTextController,
-                                  hint: "Password",
+                                  hint: "Password".i18n,
                                   fontWeight: FontWeight.normal,
                                   fontFamily: Fonts.robotoMedium,
                                   hintColor: ThemeColors.textColor,
@@ -165,7 +168,7 @@ class _SignInScreeanState extends State<SignInScreean> {
                                         margin: EdgeInsets.only(left: 45, top: 15),
                                         alignment: Alignment.topLeft,
                                         child: Text(
-                                          "Recorda accesso",
+                                          "Record access".i18n,
                                           style: TextStyle(color: ThemeColors.textColor, fontFamily: Fonts.robotoMedium, fontSize: 15),
                                         ),
                                       ),
@@ -180,7 +183,7 @@ class _SignInScreeanState extends State<SignInScreean> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "Password smarrita?",
+                                      "Forgot Password?".i18n,
                                       style: TextStyle(color: ThemeColors.textColor, fontFamily: Fonts.robotoMedium, fontSize: 18),
                                     ),
                                   ],
@@ -196,7 +199,7 @@ class _SignInScreeanState extends State<SignInScreean> {
                                   alignment: Alignment.center,
                                   child: CustomButton(
                                     height: 50,
-                                    label: "Login",
+                                    label: "Login".i18n,
                                     labelColor: ThemeColors.textField,
                                     width: MediaQuery.of(context).size.width / 1.5,
                                     isIcon: true,
@@ -300,7 +303,7 @@ class _SignInScreeanState extends State<SignInScreean> {
                                         const SizedBox(
                                           width: 10,
                                         ),
-                                        Text("LOGIN", style: TextStyle(color: ThemeColors.textField, fontFamily: Fonts.robotoMedium, fontSize: 18)),
+                                        Text("LOGIN".i18n, style: TextStyle(color: ThemeColors.textField, fontFamily: Fonts.robotoMedium, fontSize: 18)),
                                       ],
                                     ),
                                   ),
@@ -325,7 +328,7 @@ class _SignInScreeanState extends State<SignInScreean> {
                         Get.toNamed(Routes.SIGN_UP);
                       },
                       child: Text(
-                        "Registrati",
+                        "Register".i18n,
                         style: TextStyle(color: ThemeColors.textColor, fontFamily: Fonts.robotoMedium, fontSize: 18),
                       ),
                     ),
