@@ -5,10 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/src/provider.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:rota_guido/aws_auth.dart';
-import 'package:rota_guido/localization/i18n.dart';
-
-
+import 'package:rota_guido/key.dart';
 import 'package:rota_guido/providers.dart';
 import 'package:rota_guido/routes/app_pages.dart';
 import 'package:rota_guido/theme/colors.dart';
@@ -33,7 +32,7 @@ class _SignInScreeanState extends State<SignInScreean> {
 
   var emailId;
   var password;
-
+  final storage = GetStorage();
 
 
   @override
@@ -91,7 +90,7 @@ class _SignInScreeanState extends State<SignInScreean> {
                                 Container(
                                     alignment: Alignment.topCenter,
                                     child: Text(
-                                      "Login".i18n,
+                                      "Login",
                                       style: TextStyle(fontFamily: Fonts.robotoBold, fontSize: 32, color: ThemeColors.colorPrimaryOrange),
                                     )),
 
@@ -100,7 +99,7 @@ class _SignInScreeanState extends State<SignInScreean> {
                                 ///Text Filed Email
                                 CustomTextField(
                                   textEditingController: _emailTextController,
-                                  hint: "Email".i18n,
+                                  hint: "Email",
                                   fontWeight: FontWeight.normal,
                                   fontFamily: Fonts.robotoMedium,
                                   hintColor: ThemeColors.textColor,
@@ -123,7 +122,7 @@ class _SignInScreeanState extends State<SignInScreean> {
                                 ///Text Filed Email
                                 CustomTextField(
                                   textEditingController: _passwordTextController,
-                                  hint: "Password".i18n,
+                                  hint: "Password",
                                   fontWeight: FontWeight.normal,
                                   fontFamily: Fonts.robotoMedium,
                                   hintColor: ThemeColors.textColor,
@@ -159,7 +158,7 @@ class _SignInScreeanState extends State<SignInScreean> {
                                           onChanged: (value) {
                                             setState(() {
                                               isChecked = value!;
-                                              print(value);
+                                              // print(value);
                                             });
                                           },
                                         ),
@@ -168,7 +167,7 @@ class _SignInScreeanState extends State<SignInScreean> {
                                         margin: EdgeInsets.only(left: 45, top: 15),
                                         alignment: Alignment.topLeft,
                                         child: Text(
-                                          "Record access".i18n,
+                                          "Recorda Accesso",
                                           style: TextStyle(color: ThemeColors.textColor, fontFamily: Fonts.robotoMedium, fontSize: 15),
                                         ),
                                       ),
@@ -183,7 +182,7 @@ class _SignInScreeanState extends State<SignInScreean> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "Forgot Password?".i18n,
+                                      "Password Smarrita?",
                                       style: TextStyle(color: ThemeColors.textColor, fontFamily: Fonts.robotoMedium, fontSize: 18),
                                     ),
                                   ],
@@ -199,7 +198,7 @@ class _SignInScreeanState extends State<SignInScreean> {
                                   alignment: Alignment.center,
                                   child: CustomButton(
                                     height: 50,
-                                    label: "Login".i18n,
+                                    label: "Login",
                                     labelColor: ThemeColors.textField,
                                     width: MediaQuery.of(context).size.width / 1.5,
                                     isIcon: true,
@@ -253,7 +252,7 @@ class _SignInScreeanState extends State<SignInScreean> {
                                           // dismissDirection: SnackDismissDirection.HORIZONTAL,
                                           forwardAnimationCurve: Curves.easeOutBack,
                                         );
-                                      } else if (_passwordTextController.text.toString().trim().length<8) {
+                                      } /*else if (_passwordTextController.text.toString().trim().length<8) {
                                         // valid email id
                                         Get.snackbar(
                                           "error",
@@ -285,12 +284,29 @@ class _SignInScreeanState extends State<SignInScreean> {
                                           // dismissDirection: SnackDismissDirection.HORIZONTAL,
                                           forwardAnimationCurve: Curves.easeOutBack,
                                         );
-                                      }else {
+                                      }*/else {
                                         ///api calling
-
+                                        await storage.write(loginCheck,isChecked);
+                                        await storage.write(signTrue,false);
                                         final authAWSRepo = context.read(authAWSRepositoryProvider);
                                         await authAWSRepo.signIn(_emailTextController.text, _passwordTextController.text);
                                         context.refresh(authUserProvider);
+
+
+                                        /*if(isChecked==false)  {
+                                          print("If check");
+                                          await storage.write(signTrue,false);
+                                          final authAWSRepo = context.read(authAWSRepositoryProvider);
+                                          await authAWSRepo.signIn(_emailTextController.text, _passwordTextController.text);
+                                          context.refresh(authUserProvider);
+                                        } else {
+                                          print("else check");
+                                          final authAWSRepo = context.read(authAWSRepositoryProvider);
+                                          await authAWSRepo.signIn(_emailTextController.text, _passwordTextController.text);
+                                          context.refresh(authUserProvider);
+                                        }
+                                        await storage.read(signTrue);*/
+
                                       }
                                     },
                                     icon: Row(
@@ -303,7 +319,7 @@ class _SignInScreeanState extends State<SignInScreean> {
                                         const SizedBox(
                                           width: 10,
                                         ),
-                                        Text("LOGIN".i18n, style: TextStyle(color: ThemeColors.textField, fontFamily: Fonts.robotoMedium, fontSize: 18)),
+                                        Text("LOGIN", style: TextStyle(color: ThemeColors.textField, fontFamily: Fonts.robotoMedium, fontSize: 18)),
                                       ],
                                     ),
                                   ),
@@ -328,7 +344,7 @@ class _SignInScreeanState extends State<SignInScreean> {
                         Get.toNamed(Routes.SIGN_UP);
                       },
                       child: Text(
-                        "Register".i18n,
+                        "Registrati",
                         style: TextStyle(color: ThemeColors.textColor, fontFamily: Fonts.robotoMedium, fontSize: 18),
                       ),
                     ),

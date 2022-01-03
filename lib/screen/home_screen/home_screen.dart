@@ -6,10 +6,13 @@ import 'package:carousel_pro_nullsafety/carousel_pro_nullsafety.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/src/provider.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:rota_guido/aws_auth.dart';
 import 'package:rota_guido/key.dart';
 import 'package:rota_guido/profile_screen/profile_screen.dart';
+import 'package:rota_guido/providers.dart';
 import 'package:rota_guido/routes/app_pages.dart';
 import 'package:rota_guido/screen/category_screen/category_screen.dart';
 import 'package:rota_guido/screen/home_login/home_login.dart';
@@ -45,9 +48,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    print(storage.read(signTrue));
+    // print(storage.read(signTrue));
+    print(storage.read(loginCheck));
+    if(storage.hasData(loginCheck) && storage.read(loginCheck) != true){
+      storage.write(signTrue,false);
+
+    }
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {

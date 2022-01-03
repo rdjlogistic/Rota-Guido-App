@@ -18,11 +18,3 @@ var isValidEmail = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0
 
 /// isValidPassword is used for check password
 var isValidPassword = RegExp(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,10}$");
-
-
-/// passwordCharacter is used to show start in password textField
-var passwordCharacter = '*';
-
-/// minimum password validation
-var passwordMinLength = 7;
-

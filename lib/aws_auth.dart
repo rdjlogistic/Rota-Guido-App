@@ -70,8 +70,6 @@ class AWSAuthRepository {
                 }
               ));
 
-
-
           var response = await operation.response;
           var data = response.data;
           var temp = jsonDecode(data);
@@ -84,7 +82,7 @@ class AWSAuthRepository {
 
           print('Query result: ' + data);
           // Get.toNamed(Routes.HOME);
-          Get.offAll(HomeScreen());
+         Get.offAll(HomeScreen());
         } on ApiException catch (e) {
           print('Query failed: $e');
 
@@ -96,7 +94,9 @@ class AWSAuthRepository {
 
     on AuthException catch (e) {
       print(e.message);
-
+      if (isLoading && Get.isDialogOpen!) {
+        Get.back();
+      }
       Get.snackbar(
         "error",
         "${e.message}",
@@ -111,9 +111,7 @@ class AWSAuthRepository {
         // dismissDirection: SnackDismissDirection.HORIZONTAL,
         forwardAnimationCurve: Curves.easeOutBack,
       );
-      if (isLoading && Get.isDialogOpen!) {
-        Get.back();
-      }
+
     }
 
   }
@@ -144,7 +142,9 @@ class AWSAuthRepository {
     }
     on AuthException catch (e) {
       print(e.message);
-
+      if (isLoading && Get.isDialogOpen!) {
+        Get.back();
+      }
       Get.snackbar(
         "error",
         "${e.message}",
@@ -159,9 +159,7 @@ class AWSAuthRepository {
         // dismissDirection: SnackDismissDirection.HORIZONTAL,
         forwardAnimationCurve: Curves.easeOutBack,
       );
-      if (isLoading && Get.isDialogOpen!) {
-        Get.back();
-      }
+
     }
 
   }

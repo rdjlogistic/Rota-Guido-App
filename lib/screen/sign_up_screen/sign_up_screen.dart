@@ -337,8 +337,9 @@ textEN }
                                 } else if (_passwordTextController.text.toString().trim().length < 8) {
                                   // valid email id
                                   Get.snackbar(
-                                    "error",
                                     "Please enter valid Password...",
+                                    // "Please enter valid Password...",
+                                    "Include lowercase characters\nInclude uppercase characters\nInclude numerals\nInclude symbols\nMin length: 8",
                                     icon: Icon(Icons.error, color: Colors.redAccent),
                                     snackPosition: SnackPosition.TOP,
                                     backgroundColor: Colors.black26,

@@ -47,7 +47,6 @@ dependencies:
   amplify_auth_cognito: ^0.2.10
   flutter_riverpod: ^0.13.1
   lottie: ^1.2.1
-#  i18n_extension: ^4.2.0
 
   chewie: ^1.2.2
   video_player: ^2.2.9
@@ -61,9 +60,7 @@ dev_dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-#  flutter_localizations: # Annotations for the flutter_sheet_localization_generator package.
-#    sdk: flutter # Annotations for the flutter_sheet_localization_generator package.
-#
+
 
 
   # The "flutter_lints" package below contains a set of recommended lints to
