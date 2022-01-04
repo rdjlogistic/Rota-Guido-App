@@ -6,10 +6,10 @@ const amplifyconfig = ''' {
             "awsAPIPlugin": {
                 "rotaguidov2": {
                     "endpointType": "GraphQL",
-                    "endpoint": "https://hw7bt2tjgfenjndkwi76v4atgi.appsync-api.us-east-1.amazonaws.com/graphql",
+                    "endpoint": "http://192.168.0.72:20002/graphql",
                     "region": "us-east-1",
                     "authorizationType": "API_KEY",
-                    "apiKey": "da2-hwmgkvnulje65cvw2kyn6srdyu"
+                    "apiKey": "da2-fakeApiId123456"
                 }
             }
         }
@@ -24,23 +24,26 @@ const amplifyconfig = ''' {
                 },
                 "AppSync": {
                     "Default": {
-                        "ApiUrl": "https://hw7bt2tjgfenjndkwi76v4atgi.appsync-api.us-east-1.amazonaws.com/graphql",
+                        "ApiUrl": "http://192.168.0.72:20002/graphql",
                         "Region": "us-east-1",
                         "AuthMode": "API_KEY",
-                        "ApiKey": "da2-hwmgkvnulje65cvw2kyn6srdyu",
-                        "ClientDatabasePrefix": "rotaguidov2_API_KEY"
+                        "ApiKey": "da2-fakeApiId123456",
+                        "ClientDatabasePrefix": "rotaguidov2_API_KEY",
+                        "DangerouslyConnectToHTTPEndpointForTesting": true
                     },
                     "rotaguidov2_AWS_IAM": {
-                        "ApiUrl": "https://hw7bt2tjgfenjndkwi76v4atgi.appsync-api.us-east-1.amazonaws.com/graphql",
+                        "ApiUrl": "http://192.168.0.72:20002/graphql",
                         "Region": "us-east-1",
                         "AuthMode": "AWS_IAM",
-                        "ClientDatabasePrefix": "rotaguidov2_AWS_IAM"
+                        "ClientDatabasePrefix": "rotaguidov2_AWS_IAM",
+                        "DangerouslyConnectToHTTPEndpointForTesting": true
                     },
                     "rotaguidov2_AMAZON_COGNITO_USER_POOLS": {
-                        "ApiUrl": "https://hw7bt2tjgfenjndkwi76v4atgi.appsync-api.us-east-1.amazonaws.com/graphql",
+                        "ApiUrl": "http://192.168.0.72:20002/graphql",
                         "Region": "us-east-1",
                         "AuthMode": "AMAZON_COGNITO_USER_POOLS",
-                        "ClientDatabasePrefix": "rotaguidov2_AMAZON_COGNITO_USER_POOLS"
+                        "ClientDatabasePrefix": "rotaguidov2_AMAZON_COGNITO_USER_POOLS",
+                        "DangerouslyConnectToHTTPEndpointForTesting": true
                     }
                 },
                 "CredentialsProvider": {

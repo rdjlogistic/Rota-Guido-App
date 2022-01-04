@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "955566914493",
+    "project_id": "rota-guido",
+    "storage_bucket": "rota-guido.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:955566914493:android:148e76fb2ff90e1be530d4",
+        "android_client_info": {
+          "package_name": "com.mdsnet.rotaguido"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "955566914493-bm6n0uapgkll7j5kuepks31d157lub4a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXlEGdxTcvRm6yN73SvbxG8-UgW8IHj4A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "955566914493-bm6n0uapgkll7j5kuepks31d157lub4a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
