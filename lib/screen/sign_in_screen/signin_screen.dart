@@ -252,61 +252,13 @@ class _SignInScreeanState extends State<SignInScreean> {
                                           // dismissDirection: SnackDismissDirection.HORIZONTAL,
                                           forwardAnimationCurve: Curves.easeOutBack,
                                         );
-                                      } /*else if (_passwordTextController.text.toString().trim().length<8) {
-                                        // valid email id
-                                        Get.snackbar(
-                                          "error",
-                                          "Please enter valid Password...",
-                                          icon: Icon(Icons.error, color: Colors.redAccent),
-                                          snackPosition: SnackPosition.TOP,
-                                          backgroundColor: Colors.black26,
-                                          borderRadius: 20,
-                                          margin: EdgeInsets.all(15),
-                                          colorText: Colors.white,
-                                          duration: Duration(seconds: 4),
-                                          isDismissible: true,
-                                          // dismissDirection: SnackDismissDirection.HORIZONTAL,
-                                          forwardAnimationCurve: Curves.easeOutBack,
-                                        );
-                                      } else if (isChecked == false) {
-                                        // valid email id
-                                        Get.snackbar(
-                                          "error",
-                                          "Please Accept Recorda accesso ..",
-                                          icon: Icon(Icons.error, color: Colors.redAccent),
-                                          snackPosition: SnackPosition.TOP,
-                                          backgroundColor: Colors.black26,
-                                          borderRadius: 20,
-                                          margin: EdgeInsets.all(15),
-                                          colorText: Colors.white,
-                                          duration: Duration(seconds: 4),
-                                          isDismissible: true,
-                                          // dismissDirection: SnackDismissDirection.HORIZONTAL,
-                                          forwardAnimationCurve: Curves.easeOutBack,
-                                        );
-                                      }*/else {
+                                      }else {
                                         ///api calling
                                         await storage.write(loginCheck,isChecked);
                                         await storage.write(signTrue,false);
                                         final authAWSRepo = context.read(authAWSRepositoryProvider);
                                         await authAWSRepo.signIn(_emailTextController.text, _passwordTextController.text);
                                         context.refresh(authUserProvider);
-
-
-                                        /*if(isChecked==false)  {
-                                          print("If check");
-                                          await storage.write(signTrue,false);
-                                          final authAWSRepo = context.read(authAWSRepositoryProvider);
-                                          await authAWSRepo.signIn(_emailTextController.text, _passwordTextController.text);
-                                          context.refresh(authUserProvider);
-                                        } else {
-                                          print("else check");
-                                          final authAWSRepo = context.read(authAWSRepositoryProvider);
-                                          await authAWSRepo.signIn(_emailTextController.text, _passwordTextController.text);
-                                          context.refresh(authUserProvider);
-                                        }
-                                        await storage.read(signTrue);*/
-
                                       }
                                     },
                                     icon: Row(

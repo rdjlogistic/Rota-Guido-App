@@ -1,6 +1,11 @@
+import 'dart:convert';
+import 'dart:ui';
+
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
+import 'package:dropdown_below/dropdown_below.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,10 +41,45 @@ class _RegisterState extends State<Register> {
   var category;
   var farm;
 
-  String dropdownValue = 'One';
+  String _selectedCategory = "";
+  String _selectedId = "";
+  List items = [];
 
+  List<GenderModel> genderModelList = [];
+  String? selectCategory ;
 
-  getCategoryList() async {
+  onChangeDropdownCouponLocation(selectedTest) {
+    setState(() {
+      _selectedCategory = selectedTest['value'];
+      _selectedId = selectedTest['id'];
+      print(_selectedCategory);
+      print(_selectedId);
+    });
+  }
+  List<DropdownMenuItem<Object?>> _dropdownCouponLocation = [];
+
+  List<DropdownMenuItem<Object?>> buildDropdownTestItems(List xyz) {
+    List<DropdownMenuItem<Object?>> items = [];
+    items.clear();
+    for (var i in xyz) {
+      items.add(
+        DropdownMenuItem(
+          value: i,
+          child: Container(
+            height: 20,
+            // color: Colors.transparent,
+            child: Text(
+              i['value'],
+              style: TextStyle(fontSize: 15, color: ThemeColors.lightBlue, fontWeight: FontWeight.normal),
+            ),
+          ),
+        ),
+      );
+    }
+    return items;
+  }
+
+  Future<List?> getCategoryList() async {
     try {
       String graphQLDocument = '''query {
 listUserCategories(filter: {isActive: {eq:
@@ -48,7 +88,6 @@ id name {
 textEN }
 } }
 }
-
 ''';
 
       var operation = Amplify.API.query(
@@ -57,18 +96,36 @@ textEN }
       ));
 
       var response = await operation.response;
-      var data = response.data;
+      // var data = response.data;
+      print(response.data);
+      var data = jsonDecode(response.data);
+      genderModelList.clear();
+      for (int i = 0; i < (data["listUserCategories"]["items"] as List).length; i++) {
+        genderModelList.add(GenderModel("${data["listUserCategories"]["items"][i]["id"]}", "${data["listUserCategories"]["items"][i]["name"]["textEN"]}"));
+      }
 
-      print('Query result: ' + data);
+      return items;
     } on ApiException catch (e) {
       print('Query failed: $e');
     }
   }
 
   @override
-  Widget build(BuildContext context) {
-    getCategoryList();
+  void initState() {
+    getCategoryList().then((value) => {
+      items = value!,
+      if (items != null) {_dropdownCouponLocation = buildDropdownTestItems(items)}
+    });
 
+    // TODO: implement initState
+
+    super.initState();
+  }
+
+
+
+  @override
+  Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
@@ -169,27 +226,54 @@ textEN }
                             maxLine: 1,
                             obscureText: true,
                           ),
-                          const SizedBox(height: 20),
 
-                          CustomTextField(
-                            textEditingController: _categoryTextController,
-                            hint: "Categoria",
-                            fontWeight: FontWeight.normal,
-                            fontFamily: Fonts.robotoMedium,
-                            hintColor: ThemeColors.textColor,
-                            textInputAction: TextInputAction.next,
-                            keyboardType: TextInputType.text,
-                            textAlign: TextAlign.start,
-                            contentPaddingLeft: 15.0,
-                            contentPaddingRight: 15.0,
-                            contentPaddingTop: 15.0,
-                            contentPaddingBottom: 15.0,
-                            isPrefixIcon: true,
-                            prefixIcon: Image.asset(
-                              Images.category,
-                              scale: 2.5,
-                            ),
-                          ),
+                          const SizedBox(height: 20),
+                         Container(
+                                height: 50,
+                                margin: EdgeInsets.only(left: 35, right: 35),
+                                decoration: BoxDecoration(
+                                  color: ThemeColors.textFiledBackground,
+                                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                                ),
+                                // width: Get.size.width,
+                                child: Row(
+                                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    SizedBox(width: 20),
+                                    Image.asset(
+                                      Images.category,
+                                      scale: 2.5,
+                                    ),
+                                    SizedBox(width: 20),
+                                    DropdownButtonHideUnderline(
+                                      child:
+                                          Container(
+                                            width: Get.size.width/1.6,
+                                            margin: EdgeInsets.only(right: 10),
+                                            child: DropdownButton<String>(
+                                              hint: Text("Categoria"),
+                                              value: selectCategory,
+                                              icon: Icon(Icons.arrow_drop_down_sharp),
+                                              isDense: true,
+                                              onChanged: (String? newValue) {
+                                                setState(() {
+                                                  selectCategory = newValue;
+                                                });
+                                                print("selectCategoryID == > $selectCategory");
+                                              },
+                                              items: genderModelList.map((GenderModel map) {
+                                                return DropdownMenuItem<String>(
+                                                  value: map.id,
+                                                  child: Text(map.name, style: TextStyle(color: ThemeColors.blueTextColor)),
+                                                );
+                                              }).toList(),
+                                            ),
+                                          ),
+                                    )],
+                                      ),
+                                ),
+
                           const SizedBox(height: 20),
 
                           CustomTextField(
@@ -212,30 +296,6 @@ textEN }
                             ),
                           ),
 
-                        /*  const SizedBox(height: 10),
-                          Container(
-                              margin: EdgeInsets.only(left: 30, right: 30),
-                              child: DropdownButton<String>(
-                                value: dropdownValue,
-                                // icon: const Icon(Icons.arrow_downward),
-                                elevation: 16,
-                                style: const TextStyle(color: Colors.deepPurple),
-                                underline: Container(
-                                  height: 2,
-                                  // color: Colors.deepPurpleAccent,
-                                ),
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    dropdownValue = newValue!;
-                                  });
-                                },
-                                items: <String>['One', 'Two', 'Free', 'Four'].map<DropdownMenuItem<String>>((String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
-                              )),*/
                           const SizedBox(height: 10),
                           Container(
                             margin: EdgeInsets.only(left: 25),
@@ -351,6 +411,21 @@ textEN }
                                     // dismissDirection: SnackDismissDirection.HORIZONTAL,
                                     forwardAnimationCurve: Curves.easeOutBack,
                                   );
+                                } else if (selectCategory == null) {
+                                  Get.snackbar(
+                                    "error",
+                                    "please select Category....",
+                                    icon: Icon(Icons.error, color: Colors.redAccent),
+                                    snackPosition: SnackPosition.TOP,
+                                    backgroundColor: Colors.black26,
+                                    borderRadius: 20,
+                                    margin: EdgeInsets.all(15),
+                                    colorText: Colors.white,
+                                    duration: Duration(seconds: 4),
+                                    isDismissible: true,
+                                    // dismissDirection: SnackDismissDirection.HORIZONTAL,
+                                    forwardAnimationCurve: Curves.easeOutBack,
+                                  );
                                 } else if (_farmController.text.toString().trim().isEmpty) {
                                   Get.snackbar(
                                     "error",
@@ -384,7 +459,7 @@ textEN }
                                   );
                                 } else {
                                   final authAWSRepo = context.read(authAWSRepositoryProvider);
-                                  await authAWSRepo.signUp(_emailTextController.text, _passwordTextController.text, _farmController.text, isChecked);
+                                  await authAWSRepo.signUp(_emailTextController.text, _passwordTextController.text, _farmController.text, isChecked,selectCategory.toString());
                                   context.refresh(authUserProvider);
                                   Get.snackbar(
                                     "Success",
@@ -462,4 +537,11 @@ textEN }
           ],
         )));
   }
+}
+
+class GenderModel {
+  String id;
+  String name;
+
+  GenderModel(this.id, this.name);
 }

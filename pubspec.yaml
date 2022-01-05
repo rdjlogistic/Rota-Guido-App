@@ -50,6 +50,7 @@ dependencies:
 
   chewie: ^1.2.2
   video_player: ^2.2.9
+  dropdown_below: ^1.0.3
 
 
 dev_dependencies:

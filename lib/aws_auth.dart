@@ -12,7 +12,6 @@ import 'package:rota_guido/routes/app_pages.dart';
 import 'package:rota_guido/screen/home_screen/home_screen.dart';
 import 'package:rota_guido/widgets/progress.dart';
 
-
 final storage = GetStorage();
 
 /// Provides methods to interact with Firebase Authentication.
@@ -32,7 +31,7 @@ class AWSAuthRepository {
   }
 
   /// Creates a new user with the provided [email] and [password].
-  Future<void> signUp(String email, String password,String company,bool privacy,{bool isLoading = true} ) async {
+  Future<void> signUp(String email, String password, String company, bool privacy,String categoryID, {bool isLoading = true}) async {
     try {
       if (isLoading) {
         Get.dialog(LoadingDialog(width: 70, height: 70), barrierDismissible: false);
@@ -41,7 +40,7 @@ class AWSAuthRepository {
       final CognitoSignUpOptions options = CognitoSignUpOptions(userAttributes: {'email': email});
       await Amplify.Auth.signUp(username: email, password: password, options: options);
 
-          String graphQLDocument = '''mutation (\$input : CreateUserInput!){
+      String graphQLDocument = '''mutation (\$input : CreateUserInput!){
   createUser (input:\$input) 
     {
     id
@@ -49,43 +48,36 @@ class AWSAuthRepository {
     email
   }
 }
-
 ''';
 
-          var operation = Amplify.API.query(
-              request: GraphQLRequest<String>(
-                document: graphQLDocument,
-                variables: {
-                  "input": {
-                    "email": email,
-                    "company": company,
-                    // "signupDate": "[current date]",
-                    // "userCategoryId": "[UserCategoy.id selected in the “Categoria” select ]",
-                    "hasPrivacyPolicy": privacy,
-                    // "privacyPolicyDate": "[current date]",
-                    "hasTos": true,
-                    // "tosDate": "[current date]",
-                    "authProviderId": ""
-                  }
-                }
-              ));
+      var operation = Amplify.API.query(
+          request: GraphQLRequest<String>(document: graphQLDocument, variables: {
+        "input": {
+          "email": email,
+          "company": company,
+          // "signupDate": "[current date]",
+          "userCategoryId": categoryID,
+          "hasPrivacyPolicy": privacy,
+          // "privacyPolicyDate": "[current date]",
+          "hasTos": true,
+          // "tosDate": "[current date]",
+          "authProviderId": ""
+        }
+      }));
 
-          var response = await operation.response;
-          var data = response.data;
-          var temp = jsonDecode(data);
+      var response = await operation.response;
+      var data = response.data;
+      var temp = jsonDecode(data);
       if (isLoading && Get.isDialogOpen!) {
         Get.back();
       }
-          print("data Success ==> ${temp["createUser"]["id"]}");
-
-          storage.write(loginID, temp["createUser"]["id"]);
-
-          print('Query result: ' + data);
-          // Get.toNamed(Routes.HOME);
-         Get.offAll(HomeScreen());
-        } on ApiException catch (e) {
-          print('Query failed: $e');
-
+      print("data Success ==> ${temp["createUser"]["id"]}");
+      storage.write(loginID, temp["createUser"]["id"]);
+      print('Query result: ' + data);
+      // Get.toNamed(Routes.HOME);
+      Get.offAll(HomeScreen());
+    } on ApiException catch (e) {
+      print('Query failed: $e');
     } /*on Exception {
 
       rethrow;
@@ -111,9 +103,7 @@ class AWSAuthRepository {
         // dismissDirection: SnackDismissDirection.HORIZONTAL,
         forwardAnimationCurve: Curves.easeOutBack,
       );
-
     }
-
   }
 
   /// Creates a new user with the provided [email] and [password].
@@ -126,7 +116,7 @@ class AWSAuthRepository {
   }
 
   /// Creates a new user with the provided [email] and [password].
-  Future<void> signIn(String email, String password,{bool isLoading = true}) async {
+  Future<void> signIn(String email, String password, {bool isLoading = true}) async {
     try {
       if (isLoading) {
         Get.dialog(LoadingDialog(width: 70, height: 70), barrierDismissible: false);
@@ -139,8 +129,7 @@ class AWSAuthRepository {
       }
       // Get.offAll(HomeScreen());
       Get.offAllNamed(Routes.HOME);
-    }
-    on AuthException catch (e) {
+    } on AuthException catch (e) {
       print(e.message);
       if (isLoading && Get.isDialogOpen!) {
         Get.back();
@@ -159,9 +148,7 @@ class AWSAuthRepository {
         // dismissDirection: SnackDismissDirection.HORIZONTAL,
         forwardAnimationCurve: Curves.easeOutBack,
       );
-
     }
-
   }
 
   /// Signs out the current user which will emit
@@ -175,7 +162,6 @@ class AWSAuthRepository {
       if (isLoading && Get.isDialogOpen!) {
         Get.back();
       }
-
     } on Exception {
       rethrow;
     }
