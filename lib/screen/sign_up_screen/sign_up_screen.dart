@@ -1,11 +1,9 @@
 import 'dart:convert';
 import 'dart:ui';
-
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
 import 'package:dropdown_below/dropdown_below.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,6 +18,7 @@ import 'package:rota_guido/theme/image.dart';
 import 'package:rota_guido/widgets/button.dart';
 import 'package:rota_guido/widgets/text_field.dart';
 import 'package:rota_guido/widgets/validation.dart';
+import 'package:intl/intl.dart';
 
 class Register extends StatefulWidget {
   const Register({Key? key}) : super(key: key);
@@ -36,6 +35,8 @@ class _RegisterState extends State<Register> {
   final _controller = TextEditingController(text: "");
   bool isChecked = false;
 
+  DateTime now = DateTime.now();
+
   var email;
   var password;
   var category;
@@ -45,8 +46,8 @@ class _RegisterState extends State<Register> {
   String _selectedId = "";
   List items = [];
 
-  List<GenderModel> genderModelList = [];
-  String? selectCategory ;
+  List<CategoryModel> CategoryModelList = [];
+  String? selectCategory;
 
   onChangeDropdownCouponLocation(selectedTest) {
     setState(() {
@@ -56,6 +57,7 @@ class _RegisterState extends State<Register> {
       print(_selectedId);
     });
   }
+
   List<DropdownMenuItem<Object?>> _dropdownCouponLocation = [];
 
   List<DropdownMenuItem<Object?>> buildDropdownTestItems(List xyz) {
@@ -99,9 +101,9 @@ textEN }
       // var data = response.data;
       print(response.data);
       var data = jsonDecode(response.data);
-      genderModelList.clear();
+      CategoryModelList.clear();
       for (int i = 0; i < (data["listUserCategories"]["items"] as List).length; i++) {
-        genderModelList.add(GenderModel("${data["listUserCategories"]["items"][i]["id"]}", "${data["listUserCategories"]["items"][i]["name"]["textEN"]}"));
+        CategoryModelList.add(CategoryModel("${data["listUserCategories"]["items"][i]["id"]}", "${data["listUserCategories"]["items"][i]["name"]["textEN"]}"));
       }
 
       return items;
@@ -113,19 +115,19 @@ textEN }
   @override
   void initState() {
     getCategoryList().then((value) => {
-      items = value!,
-      if (items != null) {_dropdownCouponLocation = buildDropdownTestItems(items)}
-    });
+          items = value!,
+          if (items != null) {_dropdownCouponLocation = buildDropdownTestItems(items)}
+        });
 
     // TODO: implement initState
 
     super.initState();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
+    String formattedDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS-hh:mm").format(now);
+
     return GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
@@ -228,51 +230,49 @@ textEN }
                           ),
 
                           const SizedBox(height: 20),
-                         Container(
-                                height: 50,
-                                margin: EdgeInsets.only(left: 35, right: 35),
-                                decoration: BoxDecoration(
-                                  color: ThemeColors.textFiledBackground,
-                                  borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                          Container(
+                            height: 50,
+                            margin: const EdgeInsets.only(left: 35, right: 35),
+                            decoration: BoxDecoration(
+                              color: ThemeColors.textFiledBackground,
+                              borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                const SizedBox(width: 20),
+                                Image.asset(
+                                  Images.category,
+                                  scale: 2.5,
                                 ),
-                                // width: Get.size.width,
-                                child: Row(
-                                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    SizedBox(width: 20),
-                                    Image.asset(
-                                      Images.category,
-                                      scale: 2.5,
+                                const SizedBox(width: 20),
+                                DropdownButtonHideUnderline(
+                                  child: Container(
+                                    width: Get.size.width / 1.6,
+                                    margin: const EdgeInsets.only(right: 10),
+                                    child: DropdownButton<String>(
+                                      hint: const Text("Categoria"),
+                                      value: selectCategory,
+                                      icon: const Icon(Icons.arrow_drop_down_sharp),
+                                      isDense: true,
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          selectCategory = newValue;
+                                        });
+                                        // print("selectCategoryID == > $selectCategory");
+                                      },
+                                      items: CategoryModelList.map((CategoryModel map) {
+                                        return DropdownMenuItem<String>(
+                                          value: map.id,
+                                          child: Text(map.name, style: TextStyle(color: ThemeColors.blueTextColor)),
+                                        );
+                                      }).toList(),
                                     ),
-                                    SizedBox(width: 20),
-                                    DropdownButtonHideUnderline(
-                                      child:
-                                          Container(
-                                            width: Get.size.width/1.6,
-                                            margin: EdgeInsets.only(right: 10),
-                                            child: DropdownButton<String>(
-                                              hint: Text("Categoria"),
-                                              value: selectCategory,
-                                              icon: Icon(Icons.arrow_drop_down_sharp),
-                                              isDense: true,
-                                              onChanged: (String? newValue) {
-                                                setState(() {
-                                                  selectCategory = newValue;
-                                                });
-                                                print("selectCategoryID == > $selectCategory");
-                                              },
-                                              items: genderModelList.map((GenderModel map) {
-                                                return DropdownMenuItem<String>(
-                                                  value: map.id,
-                                                  child: Text(map.name, style: TextStyle(color: ThemeColors.blueTextColor)),
-                                                );
-                                              }).toList(),
-                                            ),
-                                          ),
-                                    )],
-                                      ),
-                                ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
 
                           const SizedBox(height: 20),
 
@@ -298,7 +298,7 @@ textEN }
 
                           const SizedBox(height: 10),
                           Container(
-                            margin: EdgeInsets.only(left: 25),
+                            margin: const EdgeInsets.only(left: 25),
                             // alignment: Alignment.center,
                             child: Stack(
                               children: [
@@ -311,13 +311,12 @@ textEN }
                                     onChanged: (value) {
                                       setState(() {
                                         isChecked = value!;
-                                        print(value);
                                       });
                                     },
                                   ),
                                 ),
                                 Container(
-                                  margin: EdgeInsets.only(left: 45, top: 15),
+                                  margin: const EdgeInsets.only(left: 45, top: 15),
                                   alignment: Alignment.topLeft,
                                   child: Text(
                                     "Accetto la privacy ed i Termini del servizio",
@@ -327,14 +326,10 @@ textEN }
                               ],
                             ),
                           ),
-
                           const SizedBox(height: 40),
-                          // const SizedBox(height: 50),
 
                           ///SignUp Button
                           Container(
-                            // margin: const EdgeInsets.only(top: 100),
-                            // height: MediaQuery.of(context).size.height / 3.5,
                             alignment: Alignment.center,
                             child: CustomButton(
                               height: 50,
@@ -352,13 +347,13 @@ textEN }
                                   Get.snackbar(
                                     "error",
                                     "please enter Valid Email....",
-                                    icon: Icon(Icons.error, color: Colors.redAccent),
+                                    icon: const Icon(Icons.error, color: Colors.redAccent),
                                     snackPosition: SnackPosition.TOP,
                                     backgroundColor: Colors.black26,
                                     borderRadius: 20,
-                                    margin: EdgeInsets.all(15),
+                                    margin: const EdgeInsets.all(15),
                                     colorText: Colors.white,
-                                    duration: Duration(seconds: 4),
+                                    duration: const Duration(seconds: 4),
                                     isDismissible: true,
                                     // dismissDirection: SnackDismissDirection.HORIZONTAL,
                                     forwardAnimationCurve: Curves.easeOutBack,
@@ -368,13 +363,13 @@ textEN }
                                   Get.snackbar(
                                     "error",
                                     "Please enter valid email...",
-                                    icon: Icon(Icons.error, color: Colors.redAccent),
+                                    icon: const Icon(Icons.error, color: Colors.redAccent),
                                     snackPosition: SnackPosition.TOP,
                                     backgroundColor: Colors.black26,
                                     borderRadius: 20,
-                                    margin: EdgeInsets.all(15),
+                                    margin: const EdgeInsets.all(15),
                                     colorText: Colors.white,
-                                    duration: Duration(seconds: 4),
+                                    duration: const Duration(seconds: 4),
                                     isDismissible: true,
                                     // dismissDirection: SnackDismissDirection.HORIZONTAL,
                                     forwardAnimationCurve: Curves.easeOutBack,
@@ -383,13 +378,13 @@ textEN }
                                   Get.snackbar(
                                     "error",
                                     "please enter Valid Password....",
-                                    icon: Icon(Icons.error, color: Colors.redAccent),
+                                    icon: const Icon(Icons.error, color: Colors.redAccent),
                                     snackPosition: SnackPosition.TOP,
                                     backgroundColor: Colors.black26,
                                     borderRadius: 20,
-                                    margin: EdgeInsets.all(15),
+                                    margin: const EdgeInsets.all(15),
                                     colorText: Colors.white,
-                                    duration: Duration(seconds: 4),
+                                    duration: const Duration(seconds: 4),
                                     isDismissible: true,
                                     // dismissDirection: SnackDismissDirection.HORIZONTAL,
                                     forwardAnimationCurve: Curves.easeOutBack,
@@ -400,28 +395,27 @@ textEN }
                                     "Please enter valid Password...",
                                     // "Please enter valid Password...",
                                     "Include lowercase characters\nInclude uppercase characters\nInclude numerals\nInclude symbols\nMin length: 8",
-                                    icon: Icon(Icons.error, color: Colors.redAccent),
+                                    icon: const Icon(Icons.error, color: Colors.redAccent),
                                     snackPosition: SnackPosition.TOP,
                                     backgroundColor: Colors.black26,
                                     borderRadius: 20,
-                                    margin: EdgeInsets.all(15),
+                                    margin: const EdgeInsets.all(15),
                                     colorText: Colors.white,
-                                    duration: Duration(seconds: 4),
+                                    duration: const Duration(seconds: 4),
                                     isDismissible: true,
-                                    // dismissDirection: SnackDismissDirection.HORIZONTAL,
                                     forwardAnimationCurve: Curves.easeOutBack,
                                   );
                                 } else if (selectCategory == null) {
                                   Get.snackbar(
                                     "error",
                                     "please select Category....",
-                                    icon: Icon(Icons.error, color: Colors.redAccent),
+                                    icon: const Icon(Icons.error, color: Colors.redAccent),
                                     snackPosition: SnackPosition.TOP,
                                     backgroundColor: Colors.black26,
                                     borderRadius: 20,
-                                    margin: EdgeInsets.all(15),
+                                    margin: const EdgeInsets.all(15),
                                     colorText: Colors.white,
-                                    duration: Duration(seconds: 4),
+                                    duration: const Duration(seconds: 4),
                                     isDismissible: true,
                                     // dismissDirection: SnackDismissDirection.HORIZONTAL,
                                     forwardAnimationCurve: Curves.easeOutBack,
@@ -430,13 +424,13 @@ textEN }
                                   Get.snackbar(
                                     "error",
                                     "please enter Azienda....",
-                                    icon: Icon(Icons.error, color: Colors.redAccent),
+                                    icon: const Icon(Icons.error, color: Colors.redAccent),
                                     snackPosition: SnackPosition.TOP,
                                     backgroundColor: Colors.black26,
                                     borderRadius: 20,
-                                    margin: EdgeInsets.all(15),
+                                    margin: const EdgeInsets.all(15),
                                     colorText: Colors.white,
-                                    duration: Duration(seconds: 4),
+                                    duration: const Duration(seconds: 4),
                                     isDismissible: true,
                                     // dismissDirection: SnackDismissDirection.HORIZONTAL,
                                     forwardAnimationCurve: Curves.easeOutBack,
@@ -446,33 +440,32 @@ textEN }
                                   Get.snackbar(
                                     "error",
                                     "Please Accept Privacy ..",
-                                    icon: Icon(Icons.error, color: Colors.redAccent),
+                                    icon: const Icon(Icons.error, color: Colors.redAccent),
                                     snackPosition: SnackPosition.TOP,
                                     backgroundColor: Colors.black26,
                                     borderRadius: 20,
-                                    margin: EdgeInsets.all(15),
+                                    margin: const EdgeInsets.all(15),
                                     colorText: Colors.white,
-                                    duration: Duration(seconds: 4),
+                                    duration: const Duration(seconds: 4),
                                     isDismissible: true,
                                     // dismissDirection: SnackDismissDirection.HORIZONTAL,
                                     forwardAnimationCurve: Curves.easeOutBack,
                                   );
                                 } else {
                                   final authAWSRepo = context.read(authAWSRepositoryProvider);
-                                  await authAWSRepo.signUp(_emailTextController.text, _passwordTextController.text, _farmController.text, isChecked,selectCategory.toString());
+                                  await authAWSRepo.signUp(_emailTextController.text, _passwordTextController.text, _farmController.text, isChecked, selectCategory.toString(), formattedDate, formattedDate, formattedDate);
                                   context.refresh(authUserProvider);
                                   Get.snackbar(
                                     "Success",
                                     "Your Account Create Successfully  ",
-                                    icon: Icon(Icons.done, color: Colors.green),
+                                    icon: const Icon(Icons.done, color: Colors.green),
                                     snackPosition: SnackPosition.TOP,
                                     backgroundColor: Colors.black26,
                                     borderRadius: 20,
-                                    margin: EdgeInsets.all(15),
+                                    margin: const EdgeInsets.all(15),
                                     colorText: Colors.white,
-                                    duration: Duration(seconds: 4),
+                                    duration: const Duration(seconds: 4),
                                     isDismissible: true,
-                                    // dismissDirection: SnackDismissDirection.HORIZONTAL,
                                     forwardAnimationCurve: Curves.easeOutBack,
                                   );
                                   Get.toNamed(Routes.SIGN_IN);
@@ -503,7 +496,7 @@ textEN }
                 ),
 
                 Container(
-                    margin: EdgeInsets.only(top: 30),
+                    margin: const EdgeInsets.only(top: 30),
                     alignment: Alignment.topRight,
                     child: MaterialButton(
                       onPressed: () {
@@ -539,9 +532,9 @@ textEN }
   }
 }
 
-class GenderModel {
+class CategoryModel {
   String id;
   String name;
 
-  GenderModel(this.id, this.name);
+  CategoryModel(this.id, this.name);
 }

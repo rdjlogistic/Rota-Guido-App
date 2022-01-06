@@ -31,11 +31,15 @@ class AWSAuthRepository {
   }
 
   /// Creates a new user with the provided [email] and [password].
-  Future<void> signUp(String email, String password, String company, bool privacy,String categoryID, {bool isLoading = true}) async {
+  Future<void> signUp(String email, String password, String company, bool privacy,String categoryID,String signupDate,String privacyPolicyDate,String tosDate, {bool isLoading = true}) async {
     try {
       if (isLoading) {
         Get.dialog(LoadingDialog(width: 70, height: 70), barrierDismissible: false);
       }
+      print("Sign Up date $signupDate");
+      print(privacyPolicyDate);
+      print(tosDate);
+
 
       final CognitoSignUpOptions options = CognitoSignUpOptions(userAttributes: {'email': email});
       await Amplify.Auth.signUp(username: email, password: password, options: options);
@@ -46,6 +50,9 @@ class AWSAuthRepository {
     id
     company
     email
+    signupDate
+    privacyPolicyDate
+    tosDate
   }
 }
 ''';
@@ -55,12 +62,12 @@ class AWSAuthRepository {
         "input": {
           "email": email,
           "company": company,
-          // "signupDate": "[current date]",
+          "signupDate": signupDate,
           "userCategoryId": categoryID,
           "hasPrivacyPolicy": privacy,
-          // "privacyPolicyDate": "[current date]",
+          "privacyPolicyDate": privacyPolicyDate,
           "hasTos": true,
-          // "tosDate": "[current date]",
+          "tosDate": tosDate,
           "authProviderId": ""
         }
       }));
@@ -68,6 +75,7 @@ class AWSAuthRepository {
       var response = await operation.response;
       var data = response.data;
       var temp = jsonDecode(data);
+
       if (isLoading && Get.isDialogOpen!) {
         Get.back();
       }

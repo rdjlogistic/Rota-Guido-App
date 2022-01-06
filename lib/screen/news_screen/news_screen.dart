@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:amplify_api/amplify_api.dart';
 import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +12,7 @@ import 'package:rota_guido/screen/category_screen/category_screen.dart';
 import 'package:rota_guido/theme/colors.dart';
 import 'package:rota_guido/theme/fonts.dart';
 import 'package:rota_guido/theme/image.dart';
+import 'package:rota_guido/widgets/progress.dart';
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({Key? key}) : super(key: key);
@@ -17,9 +21,31 @@ class NewsScreen extends StatefulWidget {
   _NewsScreenState createState() => _NewsScreenState();
 }
 
-exampleListNewsAPICall() async {
-  try {
-    String graphQLDocument = '''query MyQuery {
+
+class _NewsScreenState extends State<NewsScreen> {
+
+  List<NewsModel> NewsModelList = [];
+  String? id;
+  List items = [];
+  bool isLoding = true;
+
+  @override
+  void initState() {
+
+    exampleListNewsAPICall().then((value){
+      setState(() {
+
+      });
+    });
+    print("Method call ==>");
+    super.initState();
+  }
+
+ Future<List<NewsModel>?> exampleListNewsAPICall() async {
+
+    try {
+
+     /* String graphQLDocument = '''query MyQuery {
   listNews {
     items {
       id
@@ -35,28 +61,50 @@ exampleListNewsAPICall() async {
     nextToken
   }
 }
+''';*/
+      String graphQLDocument = '''query NewsScreen {
+listNews(filter: {isActive: {eq: true}}) {
+items { id
+title { textEN
+} _abstract {
+textEN }
+pubblicationDate slider {
+slides(filter: {index: {eq: 1}}) { items {
+media { file {
+bucket key region
+} }
+}}}}}}
 ''';
 
-    var operation = Amplify.API.query(
-        request: GraphQLRequest<String>(
-      document: graphQLDocument,
+      var operation =  Amplify.API.query(
+          request: GraphQLRequest<String>(
+            document: graphQLDocument,
 
-    ));
+          ));
 
-    var response = await operation.response;
-    var data = response.data;
+      var response = await operation.response;
+      var data = response.data;
+     // print("Print Data => $data");
 
-    print('Query result: ' + data);
-  } on ApiException catch (e) {
-    print('Query failed: $e');
+      var newsData = jsonDecode(data);
+      print("Print Data news data  => $newsData");
+      print("Print Data 1  => ${newsData["listNews"]["items"][0]["id"]}");
+
+      for (int i = 0; i < (newsData["listNews"]["items"] as List).length; i++) {
+        NewsModelList.add(NewsModel(" ${newsData["listNews"]["items"][i]["id"]}", " ${newsData["listNews"]["items"][i]["title"]["textEN"]}"));
+      }
+      print("Model List ==> ${NewsModelList[0].title}");
+      return NewsModelList;
+
+      // print('Query result: ' + data);
+    } on ApiException catch (e) {
+      print('Query failed: $e');
+    }
   }
-}
 
-class _NewsScreenState extends State<NewsScreen> {
+
   @override
   Widget build(BuildContext context) {
-    exampleListNewsAPICall();
-
     return Scaffold(
       body: Column(
         children: [
@@ -68,18 +116,15 @@ class _NewsScreenState extends State<NewsScreen> {
                 scale: 12,
               )),
           Container(
-            // color: Colors.indigo,
-            // height: 450,
             height: Get.size.height / 1.34,
-
             child: ListView.builder(
-                itemCount: choices.length,
+                itemCount: NewsModelList.length,
                 // choices.length,
                 itemBuilder: (context, index) {
-                  // return Container(child: Text(choices[index].title.toString()),);
                   return GestureDetector(
                     onTap: () {
                       Get.toNamed(Routes.NEWSINFO);
+                      print(NewsModelList[index].id);
                     },
                     child: Container(
                       margin: EdgeInsets.only(bottom: 30),
@@ -88,7 +133,7 @@ class _NewsScreenState extends State<NewsScreen> {
                           Container(
                             decoration: const BoxDecoration(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
+                              BorderRadius.all(Radius.circular(10)),
                               gradient: LinearGradient(
                                 begin: Alignment.topLeft,
                                 end: Alignment.centerRight,
@@ -105,7 +150,7 @@ class _NewsScreenState extends State<NewsScreen> {
                           Container(
                             decoration: const BoxDecoration(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
+                              BorderRadius.all(Radius.circular(10)),
                             ),
                             margin: EdgeInsets.only(left: 20, right: 20),
 
@@ -114,7 +159,7 @@ class _NewsScreenState extends State<NewsScreen> {
                                     bottomLeft: Radius.circular(0.0),
                                     bottomRight: Radius.circular(0.0)),
                                 child: Image.asset(
-                                  choices[index].image,
+                                  "${Images.news2}",
                                   // fit: BoxFit.fitHeight,
                                 )),
                             // height: 180,
@@ -122,13 +167,13 @@ class _NewsScreenState extends State<NewsScreen> {
                           Container(
                             decoration: const BoxDecoration(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
+                              BorderRadius.all(Radius.circular(10)),
                             ),
                             margin:
-                                EdgeInsets.only(left: 30, right: 30, top: 200),
+                            EdgeInsets.only(left: 30, right: 30, top: 200),
 
                             child: Text(
-                              choices[index].title.toString(),
+                              "${NewsModelList[index].title}",
                               style: TextStyle(
                                   color: ThemeColors.blueTextColor,
                                   fontFamily: Fonts.robotoBold,
@@ -140,13 +185,13 @@ class _NewsScreenState extends State<NewsScreen> {
                           Container(
                             decoration: const BoxDecoration(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
+                              BorderRadius.all(Radius.circular(10)),
                             ),
                             margin:
-                                EdgeInsets.only(left: 30, right: 30, top: 250),
+                            EdgeInsets.only(left: 30, right: 30, top: 250),
 
                             child: Text(
-                              choices[index].dec.toString(),
+                              "${NewsModelList[index].title}",
                               style: TextStyle(
                                   color: ThemeColors.blueTextColor,
                                   fontFamily: Fonts.robotoMedium,
@@ -158,10 +203,10 @@ class _NewsScreenState extends State<NewsScreen> {
                           Container(
                             decoration: const BoxDecoration(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
+                              BorderRadius.all(Radius.circular(10)),
                             ),
                             margin:
-                                EdgeInsets.only(left: 30, right: 30, top: 320),
+                            EdgeInsets.only(left: 30, right: 30, top: 320),
 
                             child: Text(
                               "12 Febbraio 2021",
@@ -176,48 +221,35 @@ class _NewsScreenState extends State<NewsScreen> {
                         ],
                       ),
                     ),
+
+
                   );
                 }),
-          )
+
+            /*  child: ListView.builder(
+                itemCount: NewsModelList.length,
+                itemBuilder: (BuildContext context,int index){
+                  return ListTile(
+                      leading: Icon(Icons.list),
+                      trailing: Text("GFG", style: TextStyle(
+                            color: Colors.green,fontSize: 15),),
+                      title:Text("${NewsModelList[index].title}")
+                  );
+                }
+            ),*/
+          ),
+
         ],
       ),
     );
   }
 
-  List<Choices> choices = <Choices>[
-    Choices(
-        dec:
-            "In corso di realizzazione la nuova stalla di  Palazzetto Soc. Agr.  in località Grumello Cremonese (CR).  ",
-        title:
-            'Nuovo manuale “Le stalle per la rimonta: dalla nascita al primo parto”',
-        image: "${Images.categoryImage}"),
-    Choices(
-        dec:
-            "In corso di realizzazione la nuova stalla di  Palazzetto Soc. Agr.  in località Grumello Cremonese (CR).  ",
-        title: 'Attrezzature per Animali da latte (Bovini e Bufale)',
-        icon: Icons.contacts,
-        image: "${Images.news1}"),
-    Choices(
-        dec:
-            "In corso di realizzazione la nuova stalla di  Palazzetto Soc. Agr.  in località Grumello Cremonese (CR).  ",
-        title: 'Attrezzature per Animali da carne (Ingrasso e Vacca Vitello)',
-        icon: Icons.map,
-        image: "${Images.news2}"),
-    Choices(
-        dec:
-            "In corso di realizzazione la nuova stalla di  Palazzetto Soc. Agr.  in località Grumello Cremonese (CR).  ",
-        title: 'Attrezzature per Animali da carne (Ingrasso e Vacca Vitello)',
-        icon: Icons.phone,
-        image: "${Images.newsImage}"),
-  ];
 }
 
-class Choices {
-  Choices({this.title, this.icon, this.image, this.dec});
+class NewsModel{
+  String id;
+  String title;
+  // String abstract;
 
-  final String? title;
-  final String? dec;
-  final IconData? icon;
-
-  final dynamic? image;
+  NewsModel(this.id, this.title,);
 }
