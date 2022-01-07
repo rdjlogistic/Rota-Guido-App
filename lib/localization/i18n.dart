@@ -5,7 +5,7 @@ import 'language/it-IT.dart';
 
 extension Localization on String {
 
-  static var _t = Translations.byLocale("en_US") + {"en_US": en_US, "it_IT": it_IT};
+  static var _t = Translations.byLocale("textEN") + {"textEN": textEN, "textIT": textIT};
 
   String get i18n => localize(this, _t);
 

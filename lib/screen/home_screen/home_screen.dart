@@ -476,9 +476,16 @@ class HomeWidget extends StatefulWidget {
   _HomeWidgetState createState() => _HomeWidgetState();
 }
 
+
 class _HomeWidgetState extends State<HomeWidget> {
   List<String> imageArray = ['${Images.tech1}', '${Images.tech2}', '${Images.tech3}'];
   List<String> imageArray1 = ['${Images.blog1}', '${Images.blog2}', '${Images.blog2}'];
+
+  @override
+  void initState(){
+
+  }
+
 
   getAllPagesWithSliderAndSlides() async {
     try {
@@ -568,9 +575,10 @@ destination }
 
   @override
   Widget build(BuildContext context) {
+
     getAllPagesWithSliderAndSlides();
     getHomePageCategoriesProducts();
-    return ListView(physics: new ClampingScrollPhysics(), children: [
+    return ListView(physics: const ClampingScrollPhysics(), children: [
       SingleChildScrollView(
         child: Column(
           children: [

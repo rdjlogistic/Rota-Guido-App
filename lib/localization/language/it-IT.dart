@@ -1,4 +1,4 @@
-Map<String, String> it_IT = {
+Map<String, String> textIT = {
   /// Login Screen
 
   'Login': 'Login',

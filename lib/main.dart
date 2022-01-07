@@ -26,7 +26,6 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
 
   bool _amplifyConfigured = false;
-
   @override
   void initState() {
     super.initState();
@@ -51,16 +50,15 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-
     return GetMaterialApp(
-      localizationsDelegates: [
+      localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: [
-        const Locale('en', "US"),
-        const Locale('it', "IT"),
+      supportedLocales:const  [
+         Locale('en', "EN"),
+         Locale('it', "IT"),
       ],
 
       home: I18n(

@@ -7,12 +7,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:rota_guido/key.dart';
 import 'package:rota_guido/routes/app_pages.dart';
 import 'package:rota_guido/screen/category_screen/category_screen.dart';
 import 'package:rota_guido/theme/colors.dart';
 import 'package:rota_guido/theme/fonts.dart';
 import 'package:rota_guido/theme/image.dart';
 import 'package:rota_guido/widgets/progress.dart';
+
+
+final storage = GetStorage();
 
 class NewsScreen extends StatefulWidget {
   const NewsScreen({Key? key}) : super(key: key);
@@ -28,11 +33,18 @@ class _NewsScreenState extends State<NewsScreen> {
   String? id;
   List items = [];
   bool isLoding = true;
+  String language = "";
 
   @override
   void initState() {
+    if (storage.read(appLocales).toString() == "en_EN") {
+      language = "textEN";
+    } else if (storage.read(appLocales).toString() == "it_IT") {
+      language = "textIT";
+    }
 
-    exampleListNewsAPICall().then((value){
+    print("language ==> $language");
+    exampleListNewsAPICall().then((value) {
       setState(() {
 
       });
@@ -41,11 +53,10 @@ class _NewsScreenState extends State<NewsScreen> {
     super.initState();
   }
 
- Future<List<NewsModel>?> exampleListNewsAPICall() async {
-
+  Future<List<NewsModel>?> exampleListNewsAPICall() async {
     try {
 
-     /* String graphQLDocument = '''query MyQuery {
+      /* String graphQLDocument = '''query MyQuery {
   listNews {
     items {
       id
@@ -76,22 +87,22 @@ bucket key region
 }}}}}}
 ''';
 
-      var operation =  Amplify.API.query(
+      var operation = Amplify.API.query(
           request: GraphQLRequest<String>(
             document: graphQLDocument,
 
           ));
 
+
+
       var response = await operation.response;
       var data = response.data;
-     // print("Print Data => $data");
+      // print("Print Data => $data");
 
       var newsData = jsonDecode(data);
-      print("Print Data news data  => $newsData");
-      print("Print Data 1  => ${newsData["listNews"]["items"][0]["id"]}");
 
       for (int i = 0; i < (newsData["listNews"]["items"] as List).length; i++) {
-        NewsModelList.add(NewsModel(" ${newsData["listNews"]["items"][i]["id"]}", " ${newsData["listNews"]["items"][i]["title"]["textEN"]}"));
+        NewsModelList.add(NewsModel(" ${newsData["listNews"]["items"][i]["id"]}", "${newsData["listNews"]["items"][i]["title"]["${language}"]}", "${newsData["listNews"]["items"][i]["pubblicationDate"]}", "${newsData["listNews"]["items"][i]["_abstract"]["${language}"]}",));
       }
       print("Model List ==> ${NewsModelList[0].title}");
       return NewsModelList;
@@ -105,6 +116,7 @@ bucket key region
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       body: Column(
         children: [
@@ -190,7 +202,7 @@ bucket key region
                             margin:
                             EdgeInsets.only(left: 30, right: 30, top: 250),
 
-                            child: Text(
+                             child: Text(
                               "${NewsModelList[index].title}",
                               style: TextStyle(
                                   color: ThemeColors.blueTextColor,
@@ -209,7 +221,7 @@ bucket key region
                             EdgeInsets.only(left: 30, right: 30, top: 320),
 
                             child: Text(
-                              "12 Febbraio 2021",
+                              "${NewsModelList[index].date.toString()}",
                               style: TextStyle(
                                   color: ThemeColors.whiteTextColor,
                                   fontFamily: Fonts.robotoMedium,
@@ -246,10 +258,11 @@ bucket key region
 
 }
 
-class NewsModel{
+class NewsModel {
   String id;
   String title;
-  // String abstract;
+  String date;
+  String abstract;
 
-  NewsModel(this.id, this.title,);
+  NewsModel(this.id, this.title, this.date, this.abstract);
 }

@@ -1,4 +1,4 @@
- Map<String, String> en_US = {
+ Map<String, String> textEN = {
   /// Login Screen
 
   'Login': 'Login',

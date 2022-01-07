@@ -35,6 +35,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final Locale appLocale = Localizations.localeOf(context);
+    storage.write(appLocales,appLocale);
+    print(" Show ======> ${appLocale}");
+
     return Scaffold(
       body: Center(
         child: Container(

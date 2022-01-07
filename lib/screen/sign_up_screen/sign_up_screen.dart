@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/src/provider.dart';
 import 'package:get/get.dart';
 import 'package:rota_guido/aws_auth.dart';
+import 'package:rota_guido/key.dart';
 import 'package:rota_guido/providers.dart';
 import 'package:rota_guido/routes/app_pages.dart';
 import 'package:rota_guido/theme/colors.dart';
@@ -18,6 +19,7 @@ import 'package:rota_guido/theme/image.dart';
 import 'package:rota_guido/widgets/button.dart';
 import 'package:rota_guido/widgets/text_field.dart';
 import 'package:rota_guido/widgets/validation.dart';
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:intl/intl.dart';
 
 class Register extends StatefulWidget {
@@ -41,6 +43,7 @@ class _RegisterState extends State<Register> {
   var password;
   var category;
   var farm;
+  String language = "";
 
   String _selectedCategory = "";
   String _selectedId = "";
@@ -48,6 +51,28 @@ class _RegisterState extends State<Register> {
 
   List<CategoryModel> CategoryModelList = [];
   String? selectCategory;
+
+
+  @override
+  void initState() {
+
+    if(storage.read(appLocales).toString() =="en_EN"){
+      language = "textEN";
+    }else if(storage.read(appLocales).toString() =="it_IT") {
+      language = "textIT";
+    }
+
+    print("language ==> $language");
+
+    getCategoryList().then((value) => {
+      items = value!,
+      if (items != null) {_dropdownCouponLocation = buildDropdownTestItems(items)}
+    });
+
+
+    // TODO: implement initState
+    super.initState();
+  }
 
   onChangeDropdownCouponLocation(selectedTest) {
     setState(() {
@@ -87,7 +112,9 @@ class _RegisterState extends State<Register> {
 listUserCategories(filter: {isActive: {eq:
 true}}) { items {
 id name {
-textEN }
+textEN 
+textIT
+}
 } }
 }
 ''';
@@ -103,7 +130,7 @@ textEN }
       var data = jsonDecode(response.data);
       CategoryModelList.clear();
       for (int i = 0; i < (data["listUserCategories"]["items"] as List).length; i++) {
-        CategoryModelList.add(CategoryModel("${data["listUserCategories"]["items"][i]["id"]}", "${data["listUserCategories"]["items"][i]["name"]["textEN"]}"));
+        CategoryModelList.add(CategoryModel("${data["listUserCategories"]["items"][i]["id"]}", "${data["listUserCategories"]["items"][i]["name"]["$language"]}"));
       }
 
       return items;
@@ -113,21 +140,8 @@ textEN }
   }
 
   @override
-  void initState() {
-    getCategoryList().then((value) => {
-          items = value!,
-          if (items != null) {_dropdownCouponLocation = buildDropdownTestItems(items)}
-        });
-
-    // TODO: implement initState
-
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     String formattedDate = DateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS-hh:mm").format(now);
-
     return GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(FocusNode());
@@ -205,7 +219,7 @@ textEN }
 
                           const SizedBox(height: 20),
 
-                          ///Text Filed Email
+                          ///Text Filed password
                           CustomTextField(
                             textEditingController: _passwordTextController,
                             hint: "Password",
@@ -264,7 +278,7 @@ textEN }
                                       items: CategoryModelList.map((CategoryModel map) {
                                         return DropdownMenuItem<String>(
                                           value: map.id,
-                                          child: Text(map.name, style: TextStyle(color: ThemeColors.blueTextColor)),
+                                          child: Text(map.name, style: TextStyle(color: ThemeColors.blueTextColor),maxLines: 2,),
                                         );
                                       }).toList(),
                                     ),

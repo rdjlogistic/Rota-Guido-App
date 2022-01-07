@@ -12,6 +12,7 @@ import 'package:rota_guido/routes/app_pages.dart';
 import 'package:rota_guido/screen/home_screen/home_screen.dart';
 import 'package:rota_guido/widgets/progress.dart';
 
+
 final storage = GetStorage();
 
 /// Provides methods to interact with Firebase Authentication.
@@ -23,6 +24,7 @@ class AWSAuthRepository {
   Future<String?> get user async {
     try {
       final awsUser = await Amplify.Auth.getCurrentUser();
+      print("AWS UserID ==>${awsUser.userId.toString()}");
       return awsUser.userId;
     } catch (e) {
       print("not signed in");
@@ -31,17 +33,13 @@ class AWSAuthRepository {
   }
 
   /// Creates a new user with the provided [email] and [password].
-  Future<void> signUp(String email, String password, String company, bool privacy,String categoryID,String signupDate,String privacyPolicyDate,String tosDate, {bool isLoading = true}) async {
+  Future<void> signUp(String email, String password, String company, bool privacy,String categoryID,String signupDate,String privacyPolicyDate,String tosDate,/*String authProviderId,*/ {bool isLoading = true}) async {
     try {
       if (isLoading) {
         Get.dialog(LoadingDialog(width: 70, height: 70), barrierDismissible: false);
       }
-      print("Sign Up date $signupDate");
-      print(privacyPolicyDate);
-      print(tosDate);
-
-
       final CognitoSignUpOptions options = CognitoSignUpOptions(userAttributes: {'email': email});
+
       await Amplify.Auth.signUp(username: email, password: password, options: options);
 
       String graphQLDocument = '''mutation (\$input : CreateUserInput!){
@@ -53,6 +51,7 @@ class AWSAuthRepository {
     signupDate
     privacyPolicyDate
     tosDate
+    authProviderId
   }
 }
 ''';
@@ -68,9 +67,10 @@ class AWSAuthRepository {
           "privacyPolicyDate": privacyPolicyDate,
           "hasTos": true,
           "tosDate": tosDate,
-          "authProviderId": ""
+          "authProviderId": "",
         }
       }));
+
 
       var response = await operation.response;
       var data = response.data;
@@ -86,12 +86,7 @@ class AWSAuthRepository {
       Get.offAll(HomeScreen());
     } on ApiException catch (e) {
       print('Query failed: $e');
-    } /*on Exception {
-
-      rethrow;
-
-    }*/
-
+    }
     on AuthException catch (e) {
       print(e.message);
       if (isLoading && Get.isDialogOpen!) {
