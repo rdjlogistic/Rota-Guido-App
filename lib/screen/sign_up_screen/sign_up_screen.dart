@@ -43,7 +43,8 @@ class _RegisterState extends State<Register> {
   var password;
   var category;
   var farm;
-  String language = "";
+
+  String appLang = "";
 
   String _selectedCategory = "";
   String _selectedId = "";
@@ -56,13 +57,9 @@ class _RegisterState extends State<Register> {
   @override
   void initState() {
 
-    if(storage.read(appLocales).toString() =="en_EN"){
-      language = "textEN";
-    }else if(storage.read(appLocales).toString() =="it_IT") {
-      language = "textIT";
-    }
+    appLang = storage.read(appLocales).toString().substring(3);
+    print("appLang Code  ${appLang}");
 
-    print("language ==> $language");
 
     getCategoryList().then((value) => {
       items = value!,
@@ -112,8 +109,8 @@ class _RegisterState extends State<Register> {
 listUserCategories(filter: {isActive: {eq:
 true}}) { items {
 id name {
-textEN 
-textIT
+text'''+ appLang+'''
+// textEN
 }
 } }
 }
@@ -130,7 +127,7 @@ textIT
       var data = jsonDecode(response.data);
       CategoryModelList.clear();
       for (int i = 0; i < (data["listUserCategories"]["items"] as List).length; i++) {
-        CategoryModelList.add(CategoryModel("${data["listUserCategories"]["items"][i]["id"]}", "${data["listUserCategories"]["items"][i]["name"]["$language"]}"));
+        CategoryModelList.add(CategoryModel("${data["listUserCategories"]["items"][i]["id"]}", "${data["listUserCategories"]["items"][i]["name"]["text$appLang"]}"));
       }
 
       return items;
@@ -260,27 +257,34 @@ textIT
                                   scale: 2.5,
                                 ),
                                 const SizedBox(width: 20),
-                                DropdownButtonHideUnderline(
-                                  child: Container(
-                                    width: Get.size.width / 1.6,
-                                    margin: const EdgeInsets.only(right: 10),
-                                    child: DropdownButton<String>(
-                                      hint: const Text("Categoria"),
-                                      value: selectCategory,
-                                      icon: const Icon(Icons.arrow_drop_down_sharp),
-                                      isDense: true,
-                                      onChanged: (String? newValue) {
-                                        setState(() {
-                                          selectCategory = newValue;
-                                        });
-                                        // print("selectCategoryID == > $selectCategory");
-                                      },
-                                      items: CategoryModelList.map((CategoryModel map) {
-                                        return DropdownMenuItem<String>(
-                                          value: map.id,
-                                          child: Text(map.name, style: TextStyle(color: ThemeColors.blueTextColor),maxLines: 2,),
-                                        );
-                                      }).toList(),
+                                Expanded(
+                                  // width: 250,
+                                  child: DropdownButtonHideUnderline(
+                                    child: Container(
+                                      // width: Get.size.width / 1.6,
+                                      // width: Get.size.width,
+                                      // width: 350,
+                                      margin: const EdgeInsets.only(right: 10),
+                                      child: DropdownButton<String>(
+                                        hint: const Text("Categoria",softWrap: true,maxLines: 1,),
+                                        value: selectCategory,
+                                        icon: const Icon(Icons.arrow_drop_down_sharp),
+                                        isDense: true,
+                                        onChanged: (String? newValue) {
+                                          setState(() {
+                                            selectCategory = newValue;
+                                          });
+                                          // print("selectCategoryID == > $selectCategory");
+                                        },
+                                        items: CategoryModelList.map((CategoryModel map) {
+                                          return DropdownMenuItem<String>(
+                                            value: map.id,
+                                            child: Container(
+                                              width: Get.size.width - 170,
+                                                child: Text(map.name, style: TextStyle(color: ThemeColors.blueTextColor),maxLines: null,softWrap: true,)),
+                                          );
+                                        }).toList(),
+                                      ),
                                     ),
                                   ),
                                 )
