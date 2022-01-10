@@ -52,10 +52,23 @@ class _RegisterState extends State<Register> {
 
   List<CategoryModel> CategoryModelList = [];
   String? selectCategory;
+  String authProviderId = "";
 
-
+  void _fetchSession() async {
+    try {
+      AuthSession res = await Amplify.Auth.fetchAuthSession(
+        options: CognitoSessionOptions(getAWSCredentials: true),
+      );
+      String identityId = (res as CognitoAuthSession).identityId!;
+      authProviderId = identityId.toString();
+      print('identityId: $identityId');
+    } on AuthException catch (e) {
+      print(e.message);
+    }
+  }
   @override
   void initState() {
+    _fetchSession();
 
     appLang = storage.read(appLocales).toString().substring(3);
     print("appLang Code  ${appLang}");
@@ -471,7 +484,7 @@ text'''+ appLang+'''
                                   );
                                 } else {
                                   final authAWSRepo = context.read(authAWSRepositoryProvider);
-                                  await authAWSRepo.signUp(_emailTextController.text, _passwordTextController.text, _farmController.text, isChecked, selectCategory.toString(), formattedDate, formattedDate, formattedDate);
+                                  await authAWSRepo.signUp(_emailTextController.text, _passwordTextController.text, _farmController.text, isChecked, selectCategory.toString(), formattedDate, formattedDate, formattedDate,authProviderId.toString());
                                   context.refresh(authUserProvider);
                                   Get.snackbar(
                                     "Success",

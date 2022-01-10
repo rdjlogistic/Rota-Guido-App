@@ -21,6 +21,7 @@ final authAWSRepositoryProvider = Provider<AWSAuthRepository>((ref) => AWSAuthRe
 class AWSAuthRepository {
   /// Stream of [User] which will emit the current user when
   /// the authentication state changes.
+
   Future<String?> get user async {
     try {
       final awsUser = await Amplify.Auth.getCurrentUser();
@@ -33,7 +34,7 @@ class AWSAuthRepository {
   }
 
   /// Creates a new user with the provided [email] and [password].
-  Future<void> signUp(String email, String password, String company, bool privacy,String categoryID,String signupDate,String privacyPolicyDate,String tosDate,/*String authProviderId,*/ {bool isLoading = true}) async {
+  Future<void> signUp(String email, String password, String company, bool privacy,String categoryID,String signupDate,String privacyPolicyDate,String tosDate,String authProviderId, {bool isLoading = true}) async {
     try {
       if (isLoading) {
         Get.dialog(LoadingDialog(width: 70, height: 70), barrierDismissible: false);
@@ -41,6 +42,7 @@ class AWSAuthRepository {
       final CognitoSignUpOptions options = CognitoSignUpOptions(userAttributes: {'email': email});
 
       await Amplify.Auth.signUp(username: email, password: password, options: options);
+
 
       String graphQLDocument = '''mutation (\$input : CreateUserInput!){
   createUser (input:\$input) 
@@ -67,7 +69,7 @@ class AWSAuthRepository {
           "privacyPolicyDate": privacyPolicyDate,
           "hasTos": true,
           "tosDate": tosDate,
-          "authProviderId": "",
+          "authProviderId": authProviderId,
         }
       }));
 
