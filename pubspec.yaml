@@ -46,12 +46,17 @@ dependencies:
   amplify_api: ^0.2.10
   amplify_auth_cognito: ^0.2.10
   flutter_riverpod: ^0.13.1
+  amplify_storage_s3: ^0.2.10
+  cached_network_image: ^3.2.0
   lottie: ^1.2.1
-#  flutter_html: ^2.1.5
+  html: ^0.15.0
+
+
 
   chewie: ^1.2.2
-  video_player: ^2.2.9
+#  video_player: ^2.2.9
   dropdown_below: ^1.0.3
+#  flutter_html: ^2.1.5
 
 
 dev_dependencies:
@@ -62,6 +67,7 @@ dev_dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  intl: ^0.17.0
 
 
 

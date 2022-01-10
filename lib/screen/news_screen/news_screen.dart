@@ -10,11 +10,15 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:rota_guido/key.dart';
 import 'package:rota_guido/routes/app_pages.dart';
-import 'package:rota_guido/screen/category_screen/category_screen.dart';
+
 import 'package:rota_guido/theme/colors.dart';
 import 'package:rota_guido/theme/fonts.dart';
 import 'package:rota_guido/theme/image.dart';
 import 'package:rota_guido/widgets/progress.dart';
+import 'package:intl/intl.dart';
+import 'package:html/parser.dart' as parse;
+import 'package:amplify_storage_s3/amplify_storage_s3.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 final storage = GetStorage();
 
@@ -30,19 +34,14 @@ class _NewsScreenState extends State<NewsScreen> {
   String? id;
   List items = [];
   bool isLoding = true;
-  String language = "";
+  String appLang = "";
 
   @override
   void initState() {
-    /*if (storage.read(appLocales).toString() == "en_EN") {
-      language = "textEN";
-    } else if (storage.read(appLocales).toString() == "it_IT") {
-      language = "textIT";
-    }*/
-    language = storage.read(appLocales).toString();
-    print("sub lang ${language.substring(3)}");
 
-    print("language ==> $language");
+    appLang = storage.read(appLocales).toString().substring(3);
+    print("appLang ==> $appLang");
+
     exampleListNewsAPICall().then((value) {
       setState(() {});
     });
@@ -52,13 +51,16 @@ class _NewsScreenState extends State<NewsScreen> {
 
   Future<List<NewsModel>?> exampleListNewsAPICall() async {
     try {
-
       String graphQLDocument = '''query NewsScreen {
           listNews(filter: {isActive: {eq: true}}) {
               items { id
               title { textEN} 
-              // title { text'''+language+''''}
-              _abstract {textEN }
+              // title { text''' +
+          appLang +
+          ''''}
+              _abstract {text''' +
+          appLang +
+          '''' }
                 pubblicationDate slider {
                 slides(filter: {index: {eq: 1}}) 
                 { items {media { file 
@@ -71,19 +73,30 @@ class _NewsScreenState extends State<NewsScreen> {
 
       var response = await operation.response;
       var data = response.data;
-      // print("Print Data => $data");
 
       var newsData = jsonDecode(data);
 
       for (int i = 0; i < (newsData["listNews"]["items"] as List).length; i++) {
+        var timeString = "${newsData["listNews"]["items"][i]["pubblicationDate"]}";
+        var timeFor = DateFormat('dd MMMM yyyy');
+        var timeParse = DateTime.parse(timeString);
+        var utcTimeToLocal = timeFor.format(timeParse.toLocal());
+        print(utcTimeToLocal);
+
+        var urlName = getImageList("${newsData["listNews"]["items"][i]["slider"] == null ?"" : "${newsData["listNews"]["items"][i]["slider"]["slides"]["items"][0]["media"]["file"]["key"]}"}");
         NewsModelList.add(NewsModel(
           " ${newsData["listNews"]["items"][i]["id"]}",
-          "${newsData["listNews"]["items"][i]["title"]["${language}"]}",
-          "${newsData["listNews"]["items"][i]["pubblicationDate"]}",
-          "${newsData["listNews"]["items"][i]["_abstract"]["${language}"]}",
+          "${newsData["listNews"]["items"][i]["title"]["text${appLang}"]}",
+          "${utcTimeToLocal}",
+          "${newsData["listNews"]["items"][i]["_abstract"]["text${appLang}"]}",
+          "$urlName"
+
         ));
+        print("Url Name ${urlName}");
       }
-      print("Model List ==> ${NewsModelList[0].title}");
+
+      // print("Model List ==> ${NewsModelList[0].title}");
+
       return NewsModelList;
 
       // print('Query result: ' + data);
@@ -92,8 +105,17 @@ class _NewsScreenState extends State<NewsScreen> {
     }
   }
 
+  Future<String> getImageList(String key) async {
+    final GetUrlResult result = await Amplify.Storage.getUrl(key: key);
+    print("Image URL ${result.url}");
+    return result.url;
+  }
+
   @override
   Widget build(BuildContext context) {
+   // print("Model List Image ==> ${NewsModelList[0].image}");
+
+print("Image ${NewsModelList[0].image.toString()}");
     return Scaffold(
       body: Column(
         children: [
@@ -117,7 +139,7 @@ class _NewsScreenState extends State<NewsScreen> {
                     },
                     child: Container(
                       margin: EdgeInsets.only(bottom: 30),
-                      child: Stack(
+                      child: Column(
                         children: [
                           Container(
                             decoration: const BoxDecoration(
@@ -130,62 +152,85 @@ class _NewsScreenState extends State<NewsScreen> {
                               ),
                             ),
                             margin: EdgeInsets.only(left: 20, right: 20),
-                            height: 350,
-                          ),
-                          Container(
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                            ),
-                            margin: EdgeInsets.only(left: 20, right: 20),
+                            // height: 350,
+                            child: Column(
+                              children: [
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  ),
+                                  // margin: EdgeInsets.only(left: 20, right: 20),
 
-                            child: ClipRRect(
-                                borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(0.0), bottomRight: Radius.circular(0.0)),
-                                child: Image.asset(
-                                  "${Images.news2}",
-                                  // fit: BoxFit.fitHeight,
-                                )),
-                            // height: 180,
-                          ),
-                          Container(
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                            ),
-                            margin: EdgeInsets.only(left: 30, right: 30, top: 200),
+                                  child: ClipRRect(
 
-                            child: Text(
-                              "${NewsModelList[index].title}",
-                              style: TextStyle(color: ThemeColors.blueTextColor, fontFamily: Fonts.robotoBold, fontSize: 20),
-                            ),
+                                      borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(0.0), bottomRight: Radius.circular(0.0)),
+                                      child:/* Image.asset(
+                                        "${Images.news2}",
+                                        // fit: BoxFit.fitHeight,_contact?.email ?? ""
+                                      )*/
+                                      NewsModelList[index].image == null ? Container() : Image.network('${NewsModelList[index].image}'),
 
-                            // height: 180,
-                          ),
-                          Container(
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                            ),
-                            margin: EdgeInsets.only(left: 30, right: 30, top: 250),
+                                      /*CachedNetworkImage(
+                                        imageUrl: "https://www.imgonline.com.ua/examples/orange-flowers.jpg",
+                                        placeholder: (context, url) => CircularProgressIndicator(),
+                                        errorWidget: (context, url, error) => Icon(Icons.error),
+                                      ),*/
 
-                            child: Text(
-                              "${NewsModelList[index].title}",
-                              style: TextStyle(color: ThemeColors.blueTextColor, fontFamily: Fonts.robotoMedium, fontSize: 16),
-                            ),
+                                  ),
+                                ),
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  ),
+                                  child: Text(
+                                    "${NewsModelList[index].title}",
+                                    style: TextStyle(color: ThemeColors.blueTextColor, fontFamily: Fonts.robotoBold, fontSize: 20),
+                                  ),
+                                  alignment: Alignment.topLeft,
+                                  margin: EdgeInsets.only(left: 15, right: 10, top: 15),
+                                ),
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  ),
+                                  child: Text(
+                                    "${NewsModelList[index].title}",
+                                    style: TextStyle(color: ThemeColors.blueTextColor, fontFamily: Fonts.robotoMedium, fontSize: 16),
+                                  ),
+                                  alignment: Alignment.topLeft,
+                                  margin: EdgeInsets.only(left: 15, right: 10, top: 15),
+                                ),
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  ),
+                                  child: Text(
+                                    "${NewsModelList[index].abstract.toString()}",
+                                    style: TextStyle(color: ThemeColors.blueTextColor, fontFamily: Fonts.robotoMedium, fontSize: 16),
+                                  ),
+                                  alignment: Alignment.topLeft,
+                                  margin: EdgeInsets.only(left: 15, right: 10, top: 15),
+                                ),
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                                  ),
 
-                            // height: 180,
-                          ),
-                          Container(
-                            decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(10)),
-                            ),
-                            margin: EdgeInsets.only(left: 30, right: 30, top: 320),
+                                  child: Text(
+                                    "${NewsModelList[index].date}",
+                                    style: TextStyle(color: ThemeColors.whiteTextColor, fontFamily: Fonts.robotoMedium, fontSize: 16),
+                                  ),
+                                  alignment: Alignment.topLeft,
+                                  margin: EdgeInsets.only(left: 15, right: 10, top: 15, bottom: 20),
 
-                            child: Text(
-                              "${NewsModelList[index].date.toString()}",
-                              style: TextStyle(color: ThemeColors.whiteTextColor, fontFamily: Fonts.robotoMedium, fontSize: 16),
+                                  // height: 180,
+                                ),
+                              ],
                             ),
-
-                            // height: 180,
                           ),
                         ],
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
                       ),
                     ),
                   );
@@ -214,6 +259,7 @@ class NewsModel {
   String title;
   String date;
   String abstract;
+ String image;
 
-  NewsModel(this.id, this.title, this.date, this.abstract);
+  NewsModel(this.id, this.title, this.date, this.abstract,this.image);
 }
